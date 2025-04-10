@@ -3,7 +3,7 @@
       <h1>This is where user stats will go</h1>
 
       <div class="songcontainer">
-        <div class="song" v-for="item in scores">
+        <div class="song" v-for="item in scores" :key="item.title">
           <img :src="item.img_path" :alt="item.title">
            <ul>
             <li>{{ item.title }}</li>

@@ -1,3 +1,14 @@
+<script>
+export default {
+  methods: {
+    handleLogin() {
+      alert('Form submitted');
+    }
+  }
+};
+</script>
+
+
 <template>
   <div>
     <h1>Login</h1>
