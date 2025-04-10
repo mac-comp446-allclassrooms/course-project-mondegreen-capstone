@@ -1,10 +1,21 @@
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+</script>
+
 <template>
-  <div>
-    <h1>Hello World</h1>
-    <input type="text" placeholder="Search..." />
-    <div>
-      <router-link to="/views/AboutView.vue">Go to About View</router-link>
-    </div>
+  <div id="wrapper">
+    <h1>Site Title</h1>
+
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/user">View Profile</RouterLink>
+    </nav>
+
+  </div>
+
+  <div class="content">
+    <RouterView/>
   </div>
 </template>
 
@@ -15,5 +26,10 @@ export default {
 </script>
 
 <style>
-/* Add any styles here if needed */
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:75vh;
+  }
 </style>
