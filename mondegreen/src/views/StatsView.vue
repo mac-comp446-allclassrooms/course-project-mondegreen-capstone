@@ -19,7 +19,7 @@
   function Score(title, artist, img_path, score) {
     this.title = title;
     this.artist = artist;
-    this.img_path = img_path; // replace with api call
+    this.img_path = img_path; // replace with api call? or store links in db
     this.score = score;
   }
 
@@ -45,9 +45,8 @@
 
 <style>
   .songcontainer {
-    /* i think that this should be flexbox but i haven't figured it out */
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display:flex;
+    flex-flow: row wrap;
   }
 
   ul {
@@ -63,7 +62,7 @@
 
   .song {
     display: block;
-    width: 25vw;
+    width: 3.5in;
     margin: 4px;
   }
 
