@@ -1,0 +1,48 @@
+<template>
+  <div class="game">
+    <h1>Play Game</h1>
+    <h2>Firework by Katy Perry</h2>
+    <p>
+        <div id="currScore">
+          Current Score: 0
+        </div>
+        <div id="currTotalLyrics">
+            &#9; Guessed Lyrics: 0/
+        </div>
+      </p>
+    <form>
+        <label name="guess">Enter Lyric</label>
+        <input type="text" name="guess" id="guessInput">
+        <p>
+            <button type="button" id="guessButton">Guess</button>
+        </p>
+    </form>
+    <div id="lyrics">
+
+    </div>
+    
+  </div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { playRound } from '../game_logic.js'
+
+onMounted(() => {
+  playRound()
+})
+</script>
+
+<style scoped>
+.game {
+  width: 100%;
+  padding: 20px;
+}
+
+#lyrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  margin-top: 10px;
+}
+
+</style>
