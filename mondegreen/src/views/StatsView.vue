@@ -24,7 +24,7 @@
   }
 
   const scores = [
-    new Score("symbol", "adrienne lenker", "https://images.genius.com/ea813421a18bde3bc39b73c110b0ab2c.300x300x1.jpg", 100),
+    new Score("symbol", "Adrianne Lenker", "https://images.genius.com/ea813421a18bde3bc39b73c110b0ab2c.300x300x1.jpg", 100),
     new Score("Cloudbusting","Kate Bush","https://images.genius.com/c3e6f6097640bca27833078355fd647e.300x300x1.png", 75),
     new Score("Simulation Swarm", "Big Thief", "https://images.genius.com/26084cc61b6b1849e2c762fd0ca709fc.300x300x1.png", 80),
     new Score("Pump Up the Jam", "Technotronic", "https://images.genius.com/a3992138b1d56a1238150be0051cb321.300x300x1.png", 25),
