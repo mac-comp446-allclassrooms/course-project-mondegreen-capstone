@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from genius import *
 
 
 # instantiate the app
@@ -9,6 +10,7 @@ app.config.from_object(__name__)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+kpArt = coverArt("Firework", "Katy Perry")
 
 SONGS = [
     {
@@ -58,7 +60,13 @@ SONGS = [
         'artist': 'Violent Femmes',
         'cover':  'https://images.genius.com/af35b7cdb9d07071e3946098f542377b.300x295x1.jpg',
         'score': 99
-    }
+    },
+    {
+        'title': 'Firework',
+        'artist': 'Katy Perry',
+        'cover': kpArt,
+        'score': 23 
+    } 
 ]
 
 
@@ -72,6 +80,14 @@ def songs():
     return jsonify({
         'status': 'success',
         'songs': SONGS
+    })
+    
+@app.route('/lyrics/<title>/<artist>')
+def lyrics(title = None, artist = None):
+    songLyrics = getLyrics(title, artist)
+    return jsonify({
+        'status': 'success',
+        'lyrics': songLyrics
     })
 
 

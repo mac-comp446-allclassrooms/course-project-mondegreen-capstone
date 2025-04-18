@@ -10,6 +10,14 @@ genius = lyricsgenius.Genius("79bSVlRX4YEmwomC2oIp_jiWPiGliEtArd2dsIlisD4NfHPPVu
 # for song in songs:
 #     print(song.lyrics)
 
-song = genius.search_song("firework", "Katy Perry")
-print(song.lyrics)
-print(song.song_art_image_thumbnail_url)
+def coverArt(title, artist):
+    song = genius.search_song(title, artist)
+    return song.song_art_image_thumbnail_url
+
+def getLyrics(title, artist):
+    song = genius.search_song(title, artist)
+    return song.lyrics
+
+# song = genius.search_song("firework", "Katy Perry")
+# print(song.lyrics)
+# print(song.song_art_image_thumbnail_url)
