@@ -5,6 +5,7 @@
 import word_freq_dict from './word_freqs.js'
 
 import test_song from './test_song.js'
+import router from './router/index.js';
 
 class CurrentGame {
     constructor(song, currScore, word, currGuessedWordsTotal) {
@@ -21,7 +22,7 @@ export function playRound() {
     const lyricsDiv = document.getElementById('lyrics');
     let scoreP = document.getElementById('currScore');
     let totalWords = document.getElementById('currTotalLyrics')
-    totalWords.textContent = "Guessed Lyrics: 0/" + test_song.length
+    totalWords.textContent = "Guessed Lyrics: 0/" + game.song.length
     let lyricPs = [];
     for (let i = 0; i < test_song.length; i++) {
         let newWordP = document.createElement('p');
@@ -30,16 +31,24 @@ export function playRound() {
         lyricsDiv.appendChild(newWordP);
     }
     let guessButton = document.getElementById("guessButton");
-    guessButton.addEventListener('click', ()=> {
-        let guess = document.getElementById('guessInput');
+    let guess = document.getElementById('guessInput');
+    guessButton.addEventListener('click', function click() {
+        guess = document.getElementById('guessInput');
         game.word = guess.value;
         game.currScore += checkGuessedWord(game.song, game.word, lyricPs, game);
         scoreP.textContent = "Current Score: " + game.currScore;
         guess.value = "";
         totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + test_song.length
+        checkWin(game)
     })
+    // guess = document.getElementById('guessInput');
+    // guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+    //     event.preventDefault();
+    //     if (event.key === "Enter") {
+    //         guessButton.click();
+    //     }
+    // })
 }
-
 
 function checkGuessedWord(song, word, lyricPs, game) {
     let correctGuess = song.includes(word);
@@ -97,6 +106,23 @@ function calculateScore(songRatio, engOccurances) {
     }
     
     return score;
+}
+
+function checkWin(game) {
+    if (game.currGuessedWordsTotal === game.song.length) {
+        const winDiv = document.getElementById('win_game');
+        winDiv.style.display = "block";
+        const scoreP = document.getElementById('score_p');
+        scoreP.textContent = game.currScore;
+        const homeButton = document.getElementById('homeButton');
+        homeButton.addEventListener('click', ()=> {
+            router.push('/');
+        });
+        const replayButton = document.getElementById('replayButton');
+        replayButton.addEventListener('click', ()=> {
+            router.push('/game');
+        });
+    }
 }
 
 // from https://stackoverflow.com/questions/20798477/how-to-find-the-indexes-of-all-occurrences-of-an-element-in-array
