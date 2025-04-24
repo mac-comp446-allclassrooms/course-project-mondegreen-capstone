@@ -133,6 +133,11 @@ SONGS = [
     }
 ]
 
+# sanity check route 1
+@app.route('/')
+def index():
+    return "hello"
+
 # Initialize database with sample data
 @app.before_request
 def setup():
@@ -155,19 +160,22 @@ def setup():
 # ROUTES
 #
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
+# sanity check route 2, 
+@app.route('/ping', methods=['GET', 'POST'])
 def ping_pong():
     return jsonify('pong!')
 
-@app.route('/songs', methods = ['GET'])
+@app.route('/songs', methods = ['GET', 'POST'])
 def songs():
     return jsonify({
         'status': 'success',
         'songs': SONGS
     })
-    
-@app.route('/lyrics/<title>/<artist>')
+
+# alert("Searching for: "+ this.searchQuery); 
+# var x = this.searchQuery.value
+# x 
+@app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
     return jsonify({
@@ -185,4 +193,4 @@ def admin():
 #
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
