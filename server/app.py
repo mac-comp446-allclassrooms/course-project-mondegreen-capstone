@@ -133,11 +133,6 @@ SONGS = [
     }
 ]
 
-# sanity check route 1
-@app.route('/')
-def index():
-    return "hello"
-
 # Initialize database with sample data
 @app.before_request
 def setup():
@@ -159,6 +154,11 @@ def setup():
 #
 # ROUTES
 #
+
+# sanity check route 1
+@app.route('/')
+def index():
+    return "hello"
 
 # sanity check route 2, 
 @app.route('/ping', methods=['GET', 'POST'])
@@ -187,6 +187,16 @@ def lyrics(title = None, artist = None):
 def admin():
     all_users = db.session.query(User).all()
     return render_template('admin.html', all_users = all_users)
+
+
+@app.route('/genius/search/<term>', methods = ['GET', 'POST'])
+def searchSong(term = None):
+    # parse data
+    results = searchMulti(term)
+    return jsonify({
+        'status': 'success',
+        'search_results': results
+    })
 
 #
 # RUN
