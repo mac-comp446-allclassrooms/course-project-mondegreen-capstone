@@ -28,7 +28,7 @@
     <p id="score_p"></p>
     <div>
       <button type="button" id="homeButton">Try Another Song</button>
-      <button type="button" id="replayButton">Replay</button>
+      <!-- <button type="button" id="replayButton">Replay</button> -->
       <button type="button" id="shareButton">Share Results</button>
     </div>
   </div>

@@ -20,6 +20,7 @@ export function playRound() {
     console.log("playRound called");
     let game = new CurrentGame(test_song, 0, "", 0);
     const lyricsDiv = document.getElementById('lyrics');
+    lyricsDiv.innerHTML = "";
     let scoreP = document.getElementById('currScore');
     let totalWords = document.getElementById('currTotalLyrics')
     totalWords.textContent = "Guessed Lyrics: 0/" + game.song.length
@@ -41,13 +42,13 @@ export function playRound() {
         totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + test_song.length
         checkWin(game)
     })
-    // guess = document.getElementById('guessInput');
-    // guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-    //     event.preventDefault();
-    //     if (event.key === "Enter") {
-    //         guessButton.click();
-    //     }
-    // })
+    guess = document.getElementById('guessInput');
+    guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+        if (event.key === "Enter") {
+            event.preventDefault();
+            guessButton.click();
+        }
+    })
 }
 
 function checkGuessedWord(song, word, lyricPs, game) {
@@ -118,10 +119,11 @@ function checkWin(game) {
         homeButton.addEventListener('click', ()=> {
             router.push('/');
         });
-        const replayButton = document.getElementById('replayButton');
-        replayButton.addEventListener('click', ()=> {
-            router.push('/game');
-        });
+        // const replayButton = document.getElementById('replayButton');
+        // replayButton.addEventListener('click', ()=> {
+        //     router.push('/game');
+        //     winDiv.style.display = "none";
+        // });
     }
 }
 

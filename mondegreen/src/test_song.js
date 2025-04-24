@@ -1,7 +1,5 @@
 export default [
-    "do","you"
-    // ,"ever"
-    ,"feel",
+    "do","you","ever","feel",
     // "like","a","plastic","bag","drifting","through","the","wind","wanting","to","start","again",
     // "do","you","ever","feel","feel","so","paper","thin","like","a","house","of","cards","one","blow","from","cavin'","in",
     // "do","you","ever","feel","already","buried","deep","six","feet","under","screams","but","no","one","seems","to","hear",
