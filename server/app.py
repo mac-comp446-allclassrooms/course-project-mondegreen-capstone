@@ -229,19 +229,19 @@ def updateUser():
 def deleteUser():
     return
 
-@app.route('api/song/add', methods = ['POST'])
+@app.route('/api/song/add', methods = ['POST'])
 def addSong():
     return
     
-@app.route('api/song/get', methods = ['POST'])
+@app.route('/api/song/get', methods = ['POST'])
 def getSong():
     return
 
-@app.route('api/song/update', methods = ['POST'])
+@app.route('/api/song/update', methods = ['POST'])
 def updateSong():
     return
 
-@app.route('api/song/delete', methods = ['POST'])
+@app.route('/api/song/delete', methods = ['POST'])
 def deleteSong():
     return
 
