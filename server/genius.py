@@ -40,6 +40,10 @@ def getLyrics(title, artist):
         return clean_lyrics(song.lyrics)
     return "Lyrics not found"
 
+def searchMulti(term):
+    results = genius.search(search_term=term, per_page=20, type_='song')
+    return results
+
 # song = genius.search_song("firework", "Katy Perry")
 # print(song.lyrics)
 # print(song.song_art_image_thumbnail_url)

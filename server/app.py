@@ -4,7 +4,7 @@
 # flask run --port=5001 --debug
 #
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from genius import *
 from flask_sqlalchemy import SQLAlchemy
@@ -197,6 +197,53 @@ def searchSong(term = None):
         'status': 'success',
         'search_results': results
     })
+    
+#
+# REST
+#
+
+@app.route('/api/user', methods = ['POST'])
+def addUser():
+    request_data = request.get_json()
+    
+    if request_data == None:
+        return 'missing request', 400
+    
+    username = request_data['username']
+    new_user = User(username)
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return 'success', 204
+
+@app.route('/api/user/<username>', methods = ['GET'])
+def getUser():
+    return
+
+@app.route('/api/user/<username>', methods = ['POST'])
+def updateUser():
+    request_data = request.get_json()
+    return
+
+@app.route('/api/user/delete', methods = ['POST'])
+def deleteUser():
+    return
+
+@app.route('api/song/add', methods = ['POST'])
+def addSong():
+    return
+    
+@app.route('api/song/get', methods = ['POST'])
+def getSong():
+    return
+
+@app.route('api/song/update', methods = ['POST'])
+def updateSong():
+    return
+
+@app.route('api/song/delete', methods = ['POST'])
+def deleteSong():
+    return
 
 #
 # RUN
