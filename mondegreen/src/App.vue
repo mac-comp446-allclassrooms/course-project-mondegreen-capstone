@@ -16,9 +16,10 @@ import { RouterLink, RouterView } from 'vue-router'
       </nav>
     </div>
 
-    <div class="content">
-      <RouterView/>
-    </div>
+    <router-view v-slot="{ Component }">
+    <component :is="Component" />
+  </router-view>
+
 
     Other links for now:
     <footer>
