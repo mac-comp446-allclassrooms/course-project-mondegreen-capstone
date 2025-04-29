@@ -30,4 +30,8 @@ const store = createStore({
   },
 });
 
+console.log(store.getters.getLyrics);
+console.log(store.getters.getTitle);
+console.log(store.getters.getArtist);
+
 export default store;
