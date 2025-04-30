@@ -4,21 +4,43 @@
 # flask run --port=5001 --debug
 #
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, flash
 from flask_cors import CORS
 from genius import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing import List, Optional
+from flask_login import LoginManager, UserMixin
+import os
+from datetime import datetime
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_security import Security, SQLAlchemyUserDatastore, login_required, login_user, current_user
+from flask_security.utils import hash_password, verify_password
 
 
 # instantiate the app
 app = Flask(__name__)
+login = LoginManager(app)
 app.config.from_object(__name__)
+
+app.config['SECRET_KEY'] = 'supersecret'  # Secret key for session management and JWT
+app.config['SECURITY_PASSWORD_SALT'] = 'salt'  # Salt for hashing passwords
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = 'SECRETKEYFORENCRYPTION'  # Secret key for JWT encoding
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
+
+# Celery and Redis configuration
+app.config.update(
+    CELERY_BROKER_URL='redis://localhost:6379',  # Redis as the message broker
+    result_backend='redis://localhost:6379'  # Redis as the result backend
+)
+
+# TODO: how to generate and store secure keys?
+SECRET_KEY = os.urandom(32)
+# app.config['SECRET_KEY'] = SECRET_KEY
 
 #
 # DATABASE
@@ -36,6 +58,7 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
+jwt = JWTManager(app)
 
 class Song(db.Model):
     __tablename__ = "songs"
@@ -58,13 +81,18 @@ class Song(db.Model):
         self.img_path = img_path
         self.score = score
     
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(64), index=True, unique=True)
     # email: Mapped[str] = mapped_column(String(120), index=True, unique=True) # ?
     password_hash: Mapped[Optional[str]] = mapped_column(String(256))
+    
+    active: Mapped[bool] = mapped_column(Boolean)  # Indicates if the user's account is active
+    fs_uniquifier: Mapped[str] = mapped_column(String(255))  # Unique identifier used by Flask-Security
+    last_login: Mapped[datetime] = mapped_column(DateTime(timezone=True))  # Timestamp of the user's last login
+    API_token: Mapped[str] = mapped_column(String, default=None)  # Stores the JWT token for API authentication
     
     # Understanding relationships:
     # https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html
@@ -75,7 +103,15 @@ class User(db.Model):
     
     def __init__(self, username):
         self.username = username
-
+        
+# Setup Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User)
+security = Security(app, user_datastore)
+    
+# TODO: leftover from werkzeug, delete?
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
 
 
 # test API call
@@ -202,32 +238,10 @@ def searchSong(term = None):
 # REST
 #
 
-@app.route('/api/user', methods = ['POST'])
-def addUser():
-    request_data = request.get_json()
-    
-    if request_data == None:
-        return 'missing request', 400
-    
-    username = request_data['username']
-    new_user = User(username)
-    db.session.add(new_user)
-    db.session.commit()
-    
-    return 'success', 204
-
-@app.route('/api/user/<username>', methods = ['GET'])
-def getUser():
-    return
-
-@app.route('/api/user/<username>', methods = ['POST'])
-def updateUser():
-    request_data = request.get_json()
-    return
-
-@app.route('/api/user/delete', methods = ['POST'])
-def deleteUser():
-    return
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    #form = LoginForm()
+    return #form
 
 @app.route('/api/song/add', methods = ['POST'])
 def addSong():
@@ -250,4 +264,4 @@ def deleteSong():
 #
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
