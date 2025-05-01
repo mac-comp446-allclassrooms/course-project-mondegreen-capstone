@@ -2,24 +2,28 @@
   <main>
     <h1>Those are the lyrics?</h1>
     <p>Search for a song</p>
-    <div>
+    <!-- <div>
       <input type="text" v-model="searchTitle" placeholder="Enter song" />
       <input v-on:keyup.enter="submitSearch" type="text" v-model="searchArtist" placeholder="Enter artist" />
       <button @click="submitSearch">Search</button>
       {{ message }}
     </div>
-    <p>Or</p>
-    <p>More general search</p>
-    <div>
+    <p>Or</p> -->
+    {{ message2 }}
+    <!-- <p>More general search</p> -->
+    <div >
       <input v-on:keyup.enter="generalSearch" type="text" v-model="searchGeneral" placeholder="Enter Song" />
       <button @click="generalSearch">Search</button>
+      <div class="songcontainer">
       <div class="song" v-for="item in scores" :key="item.title">
           <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
            <ul>
             <li>{{ item.title }}</li>
             <li>{{ item.artist }}</li>
            </ul>
+           <button @click="playSong(item.title,item.artist)">Play Song</button>
       </div>
+    </div>
     </div>
     <p>Just starting?</p>
     <router-link to="/howto">
@@ -55,12 +59,17 @@ export default {
         axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
           .then(response => {
             this.message = '';
-            store.commit('setLyrics', response.data.lyrics);
-            store.commit('setTitle', title);
-            store.commit('setArtist', artist);
-            this.$router.push({
-            path: '/game'
-          });
+            if (response.data.lyrics === "Lyrics not found") {
+              this.message = "Lyrics not found";
+            } else {
+              this.message = `Found lyrics for "${title}" by "${artist}"`;
+              store.commit('setLyrics', response.data.lyrics);
+              store.commit('setTitle', title);
+              store.commit('setArtist', artist);
+              this.$router.push({
+                path: '/game'
+              });
+            }
           })
           .catch(error => {
             this.message = `Error searching for "${title}" by "${artist}"...`;
@@ -78,7 +87,6 @@ export default {
       if (title) {
         axios.get(`http://localhost:5001/genius/search2/${encodeURIComponent(title)}`)
           .then(response => {
-            this.message2 = response.data;
             this.scores = response.data;
           })
           .catch(error => {
@@ -88,7 +96,30 @@ export default {
       } else {
         alert("Please enter a song title.");
       }
-    },    
+    }, 
+    playSong(title, artist) {
+      this.message2 = '';
+      this.message2 = `Starting game: "${title}" by "${artist}"...`;
+
+      if (title && artist) {
+        axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
+          .then(response => {
+            this.message2 = '';
+            store.commit('setLyrics', response.data.lyrics);
+            store.commit('setTitle', title);
+            store.commit('setArtist', artist);
+            this.$router.push({
+              path: '/game'
+            });
+          })
+          .catch(error => {
+            this.message2 = `Error starting game for "${title}" by "${artist}"...`;
+            console.error("Error fetching lyrics:", error);
+          });
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+  },
     created() {
       this.submitSearch();
       this.generalSearch();
@@ -98,3 +129,35 @@ export default {
 
 
 </script>
+
+<style>
+ .songcontainer {
+    display:flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  img {
+    width: 150px;
+    border-radius: 4px;
+    float: left;
+    margin-right: 8px;
+  }
+
+  .song {
+    display: block;
+    margin: 4px;
+    align-self: center
+  }
+
+  li:first-child {
+    color:black;
+    font-weight: bold;
+  }
+
+</style>

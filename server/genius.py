@@ -45,7 +45,7 @@ def searchMulti(term):
     return results
 
 def searchMulti2(term):
-    data = genius.search(search_term=term, per_page=5, type_='song')
+    data = genius.search(search_term=term, per_page=9, type_='song')
 
     songs = []
 
