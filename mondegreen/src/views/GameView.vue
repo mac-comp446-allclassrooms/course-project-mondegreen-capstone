@@ -4,7 +4,7 @@
     <h2>{{title}} by {{artist}}</h2>
     <p id="currScore">Current Score: 0</p>
     <p id="currTotalLyrics">Guessed Lyrics: 0/</p>
-    {{ lyrics }}
+    <!-- {{ lyrics }} -->
     <form>
       <label name="guess">Enter Lyric</label>
       <input type="text" name="guess" id="guessInput">
@@ -33,14 +33,22 @@ import { playRound } from '../game_logic.js';
 import store from '../store';
 
 const route = useRoute();
-const lyrics = computed(() => store.getters.getLyrics);
+let lyrics = computed(() => store.getters.getLyrics);
 const title = computed(() => store.getters.getTitle);
 const artist = computed(() => store.getters.getArtist);
 
 lyrics.value = lyrics.value.replace(/_/g, ' ');
+const lyrics_array = lyrics.value.split(" ");
+lyrics_array.shift();
+console.log(lyrics_array);
+console.log(lyrics.value);
 
 onMounted(() => {
-  playRound();
+  // if (lyrics.value === "Lyrics not found") {
+    // alert("Lyrics not found")
+  // } else {
+    playRound(lyrics_array);
+  // }
 });
 </script>
 

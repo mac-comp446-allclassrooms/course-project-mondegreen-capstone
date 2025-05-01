@@ -16,16 +16,16 @@ class CurrentGame {
     }
 }
 
-export function playRound() {
+export function playRound(song) {
     console.log("playRound called");
-    let game = new CurrentGame(test_song, 0, "", 0);
+    let game = new CurrentGame(song, 0, "", 0);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";
     let scoreP = document.getElementById('currScore');
     let totalWords = document.getElementById('currTotalLyrics')
     totalWords.textContent = "Guessed Lyrics: 0/" + game.song.length
     let lyricPs = [];
-    for (let i = 0; i < test_song.length; i++) {
+    for (let i = 0; i < song.length; i++) {
         let newWordP = document.createElement('p');
         newWordP.textContent = " ";
         lyricPs.push(newWordP);
@@ -39,7 +39,7 @@ export function playRound() {
         game.currScore += checkGuessedWord(game.song, game.word, lyricPs, game);
         scoreP.textContent = "Current Score: " + game.currScore;
         guess.value = "";
-        totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + test_song.length
+        totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
         checkWin(game)
     })
     guess = document.getElementById('guessInput');
