@@ -12,7 +12,7 @@
     </form>
     <button type="button" id="hintButton">Hint</button>
     <div id="lyrics">
-      <p></p>
+      <div></div>
     </div>
   </div>
   <div id="win_game" style="display:none">
@@ -44,42 +44,10 @@ console.log(lyrics_array);
 console.log(lyrics.value);
 
 onMounted(() => {
-  // if (lyrics.value === "Lyrics not found") {
-    // alert("Lyrics not found")
-  // } else {
+  if (lyrics.value === "Lyrics not found") {
+    alert("Lyrics not found")
+  } else {
     playRound(lyrics_array);
-  // }
+  }
 });
 </script>
-
-<style scoped>
-.game {
-  width: 100%;
-  padding: 20px;
-}
-
-#lyrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  margin-top: 10px;
-}
-
-#win_game {
-  position: absolute;
-  width: 70%;
-  height: 30%;
-  background: hsla(160, 100%, 37%, 1);
-  color: black;
-  margin: auto;
-  padding: 5%;
-  text-align: center;
-}
-
-#score_p {
-  background: white;
-  color: black;
-  font-size: x-large;
-  text-align: center;
-}
-
-</style>

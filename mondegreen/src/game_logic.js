@@ -21,23 +21,24 @@ export function playRound(song) {
     let game = new CurrentGame(song, 0, "", 0);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";
-    let scoreP = document.getElementById('currScore');
+    let scoreDiv = document.getElementById('currScore');
     let totalWords = document.getElementById('currTotalLyrics')
     totalWords.textContent = "Guessed Lyrics: 0/" + game.song.length
-    let lyricPs = [];
+    let lyricDivs = [];
     for (let i = 0; i < song.length; i++) {
-        let newWordP = document.createElement('p');
-        newWordP.textContent = " ";
-        lyricPs.push(newWordP);
-        lyricsDiv.appendChild(newWordP);
+        let newWordDiv = document.createElement('div');
+        newWordDiv.className = "one_word"
+        newWordDiv.textContent = " ";
+        lyricDivs.push(newWordDiv);
+        lyricsDiv.appendChild(newWordDiv);
     }
     let guessButton = document.getElementById("guessButton");
     let guess = document.getElementById('guessInput');
     guessButton.addEventListener('click', function click() {
         guess = document.getElementById('guessInput');
         game.word = guess.value;
-        game.currScore += checkGuessedWord(game.song, game.word, lyricPs, game);
-        scoreP.textContent = "Current Score: " + game.currScore;
+        game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
+        scoreDiv.textContent = "Current Score: " + game.currScore;
         guess.value = "";
         totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
         checkWin(game)
@@ -51,13 +52,13 @@ export function playRound(song) {
     })
 }
 
-function checkGuessedWord(song, word, lyricPs, game) {
+function checkGuessedWord(song, word, lyricDivs, game) {
     let correctGuess = song.includes(word);
     if (correctGuess) {
         const currIndexes = getAllIndexes(song, word);
         for (let i = 0; i < currIndexes.length; i++) {
             const index = currIndexes[i];
-            lyricPs[index].textContent = word;
+            lyricDivs[index].textContent = word;
         }
         return getScore(song, word, game);
     } else if (!correctGuess) {

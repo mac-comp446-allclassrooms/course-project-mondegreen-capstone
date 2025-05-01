@@ -102,3 +102,59 @@ h1 {
 p, div {
   font-family: Verdana;
 }
+
+input {
+  border-radius: 5px;
+  font-family: Verdana;
+  background-color: white;
+  border-width: 0;
+  margin-right: 0.5rem;
+}
+
+button {
+  border-radius: 5px;
+  font-family: Verdana;
+  border-width: 0;
+  background-color: #EDB9DD;
+	box-shadow: 1px 1px 3px #875578;
+}
+
+.one_word {
+  background-color: white;
+  margin: 0.3rem;
+  padding: 5%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.game {
+  width: 100%;
+  padding: 20px;
+}
+
+#lyrics {
+  background-color: #86D1B6;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  margin-top: 10px;
+  padding: 0.3rem;
+  border-radius: 8px;
+}
+
+#win_game {
+  position: absolute;
+  width: 70%;
+  height: 30%;
+  background: hsla(160, 100%, 37%, 1);
+  color: black;
+  margin: auto;
+  padding: 5%;
+  text-align: center;
+}
+
+#score_p {
+  background: white;
+  color: black;
+  font-size: x-large;
+  text-align: center;
+}
