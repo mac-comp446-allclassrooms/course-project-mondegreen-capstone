@@ -15,7 +15,7 @@ from flask_login import LoginManager, UserMixin
 import os
 from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from flask_security import Security, SQLAlchemyUserDatastore, login_required, login_user, current_user
+from flask_security import Security, SQLAlchemyUserDatastore, login_required, login_user, current_user, logout_user
 from flask_security.utils import hash_password, verify_password
 
 
@@ -89,10 +89,10 @@ class User(UserMixin, db.Model):
     # email: Mapped[str] = mapped_column(String(120), index=True, unique=True) # ?
     password_hash: Mapped[Optional[str]] = mapped_column(String(256))
     
-    active: Mapped[bool] = mapped_column(Boolean)  # Indicates if the user's account is active
-    fs_uniquifier: Mapped[str] = mapped_column(String(255))  # Unique identifier used by Flask-Security
-    last_login: Mapped[datetime] = mapped_column(DateTime(timezone=True))  # Timestamp of the user's last login
-    API_token: Mapped[str] = mapped_column(String, default=None)  # Stores the JWT token for API authentication
+    # active: Mapped[bool] = mapped_column(Boolean)  # Indicates if the user's account is active
+    # fs_uniquifier: Mapped[str] = mapped_column(String(255))  # Unique identifier used by Flask-Security
+    # last_login: Mapped[datetime] = mapped_column(DateTime(timezone=True))  # Timestamp of the user's last login
+    # API_token: Mapped[str] = mapped_column(String, default=None)  # Stores the JWT token for API authentication
     
     # Understanding relationships:
     # https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html
@@ -105,8 +105,8 @@ class User(UserMixin, db.Model):
         self.username = username
         
 # Setup Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, User)
-security = Security(app, user_datastore)
+# user_datastore = SQLAlchemyUserDatastore(db, User)
+# security = Security(app, user_datastore)
     
 # TODO: leftover from werkzeug, delete?
 @login.user_loader
@@ -239,26 +239,66 @@ def searchSong2(term = None):
     results = searchMulti2(term)
     return results
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    #form = LoginForm()
-    return #form
-
-@app.route('/api/song/add', methods = ['POST'])
-def addSong():
-    return
+# @app.route('/login', methods=['POST'])
+# def home():
+#     username = request.form['username']
+#     email = request.form['email']
+#     password = request.form['password']
+#     user_data = User.query.filter_by(email=email).first()
+#     if user_data and verify_password(password, user_data.password):
+#         login_user(user_data)
+#         token = create_access_token(identity=user_data.username)  # Generate JWT token
+#         user_data.API_token = token
+#         user_data.last_login = datetime.now()
+#         db.session.commit()
+#         # success
+#         return jsonify({
+#             'status': 'success'
+#         })
+#     # wrong password, failure
+#     return jsonify({
+#             'status': 'failure',
+#             'message': 'wrong password'
+#         })
     
-@app.route('/api/song/get', methods = ['POST'])
-def getSong():
-    return
+# @app.route('/signup', methods=['POST'])
+# def signup():
+#     username = request.form['username']
+#     email = request.form['email']
+#     password = request.form['password']
+#     # Check if the username already exists
+#     if not User.query.filter_by(email=email).first() and not User.query.filter_by(username=username).first():
+#         new_user = user_datastore.create_user(
+#             email=email,
+#             username=username,
+#             password=hash_password(password),  # Securely hash the password
+#         )
+#         db.session.commit()
+#         return jsonify({
+#             'status': 'success'
+#         })
+#     return jsonify({
+#         'status': 'failure',
+#         'message': 'account already exists'
+#     })
+    
+# @app.route('/logout', methods=['POST'])
+# def logout():
+#     logout_user()
+#     return jsonify({
+#         'status': 'success'
+#     })
 
-@app.route('/api/song/update', methods = ['POST'])
-def updateSong():
-    return
-
-@app.route('/api/song/delete', methods = ['POST'])
-def deleteSong():
-    return
+@app.route('/song/<id>', methods = ['GET', 'POST'])
+def addSong():
+    if(current_user):
+        return 'logged in'
+    return 'logged out'
+    # search by id or artist/title?
+    # GET: returns song json or "song not found"
+    # -> all songs if nothing in <>?
+    # POST: adds if new or updates if not new
+    # don't need a delete functionality from the frontend, admin interface could have delete for debugging
 
 #
 # RUN

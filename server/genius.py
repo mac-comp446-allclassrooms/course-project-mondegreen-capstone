@@ -101,4 +101,4 @@ def searchMulti2(term):
 #     print(f"Title: {title}, Artist: {artist}, Release Date: {release_date}, URL: {url}")
 # print(song.song_art_image_thumbnail_url)
 
-print(searchMulti("Firework"))
+# print(searchMulti("Firework"))
