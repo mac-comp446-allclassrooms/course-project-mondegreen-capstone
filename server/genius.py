@@ -31,7 +31,7 @@ def clean_lyrics(lyrics):
                ' ',
                lyrics,
                flags=re.VERBOSE)
-    return lyrics
+    return lyrics.lower()
 
 
 def getLyrics(title, artist):
