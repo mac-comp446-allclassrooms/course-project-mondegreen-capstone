@@ -229,14 +229,15 @@ def admin():
 def searchSong(term = None):
     # parse data
     results = searchMulti(term)
-    return jsonify({
-        'status': 'success',
-        'search_results': results
-    })
-    
+    return results
 #
 # REST
 #
+@app.route('/genius/search2/<term>', methods = ['GET', 'POST'])
+def searchSong2(term = None):
+    # parse data
+    results = searchMulti2(term)
+    return results
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

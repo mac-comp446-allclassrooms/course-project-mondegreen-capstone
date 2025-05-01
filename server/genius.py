@@ -44,6 +44,61 @@ def searchMulti(term):
     results = genius.search(search_term=term, per_page=20, type_='song')
     return results
 
-# song = genius.search_song("firework", "Katy Perry")
-# print(song.lyrics)
+def searchMulti2(term):
+    data = genius.search(search_term=term, per_page=5, type_='song')
+
+    songs = []
+
+    for section in data.get('sections', []):
+
+        if section.get('type') == 'song':
+
+            for hit in section.get('hits', []):
+
+                result = hit.get('result', {})
+
+    # Extract fields here
+
+                song_data = {
+
+                'title': result.get('title'),
+
+                'artist': result.get('artist_names'),
+
+                'release_date': result.get('release_date_for_display', 'N/A'),
+
+                'url': result.get('url'),
+
+                'song_art_image_thumbnail_url': result.get('song_art_image_thumbnail_url'),
+
+                'pageviews': result.get('stats', {}).get('pageviews', 0),
+
+                'annotations': result.get('annotation_count', 0)
+
+                }
+
+                songs.append(song_data)
+
+    results = []
+    # Print the results
+    for song in songs:
+        results.append(f"Title: {song['title']}, Artist: {song['artist']}, Release Date: {song['release_date']}, URL: {song['url']}, Pageviews: {song['pageviews']}, ImageURL: {song['song_art_image_thumbnail_url']}")
+    return songs
+# songs = data['hits']
+
+# for song in songs:
+
+#     result = song['result']
+
+#     title = result['title']
+
+#     artist = result['artist_names']
+
+#     release_date = result.get('release_date_for_display', 'N/A')
+
+#     url = result['url']
+
+#     print(f"Title: {title}, Artist: {artist}, Release Date: {release_date}, URL: {url}")
 # print(song.song_art_image_thumbnail_url)
+
+print(searchMulti("Firework"))

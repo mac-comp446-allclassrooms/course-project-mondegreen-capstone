@@ -15,10 +15,12 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/login">Login</RouterLink>
       </nav>
     </div>
-
-    <router-view v-slot="{ Component }">
+<div>
+  <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>
+</div>
+    
 
 
     Other links for now:
