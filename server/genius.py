@@ -102,3 +102,20 @@ def searchMulti2(term):
 # print(song.song_art_image_thumbnail_url)
 
 # print(searchMulti("Firework"))
+def searchGenre(genre):
+    data = genius.tag(genre, page=1)
+
+    results = []
+    songs = data['hits']
+
+    for song in songs:
+        song_data = {
+        'title' : song['title'],
+        'artist' : song['artists']
+        }
+
+        results.append(song_data)
+
+    return results
+
+print(searchGenre("pop"))

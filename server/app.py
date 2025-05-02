@@ -239,6 +239,11 @@ def searchSong2(term = None):
     results = searchMulti2(term)
     return results
 
+@app.route('/genius/genre/<genre>/', methods = ['GET', 'POST'])
+def searchGenre2(genre = None):
+    # parse data
+    results = searchGenre(genre)
+    return results
 # @app.route('/login', methods=['POST'])
 # def home():
 #     username = request.form['username']

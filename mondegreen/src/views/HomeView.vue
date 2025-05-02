@@ -14,16 +14,34 @@
     <div >
       <input v-on:keyup.enter="generalSearch" type="text" v-model="searchGeneral" placeholder="Enter Song" />
       <button @click="generalSearch">Search</button>
-      <div class="songcontainer">
-      <div class="song" v-for="item in scores" :key="item.title">
-          <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
-           <ul>
-            <li>{{ item.title }}</li>
-            <li>{{ item.artist }}</li>
-           </ul>
-           <button @click="playSong(item.title,item.artist)">Play Song</button>
-      </div>
+      <div class="songcontainerHome">
+        <div class = "songHome" v-for="item in scores" :key="item.title">
+            <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
+            <ul>
+              <p>{{ item.title }}</p>
+              <p>{{ item.artist }}</p>
+            </ul>
+            <button @click="playSong(item.title,item.artist)">Play Song</button>
+        </div>
     </div>
+    </div>
+    <h2>Want to be recommended some songs? Select a genre</h2>
+    <div class = "genreButtons">
+    <div v-for="genre in genres" :key="genre">
+      <button @click="recommended(genre)">{{ genre }}</button>
+    </div>
+  </div>
+
+    <div class="songcontainerHome">
+      <p>{{ message3 }}</p>
+      <div class = "songHome" v-for="item in recommendation" :key="item.title">
+          <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
+          <ul>
+            <p>{{ item.title }}</p>
+            <p>{{ item.artist }}</p>
+          </ul>
+          <button @click="playSong(item.title,item.artist)">Play Song</button>
+      </div>
     </div>
     <p>Just starting?</p>
     <router-link to="/howto">
@@ -34,7 +52,6 @@
 
 <script>
 import axios from 'axios';
-import { nextTick } from "vue";
 import store from '../store';
 export default {
   name: "HomeView",
@@ -46,6 +63,9 @@ export default {
       message: "",
       message2: "",
       scores: [],
+      genres: ["rap", "pop", "r-b", "rock", "country", "non-music"],
+      message3: "",
+      recommendation: [],
     };
   },
   methods: {
@@ -119,10 +139,24 @@ export default {
       } else {
         alert("Something went wrong. Please try again.");
       }
-  },
+    },
+    recommended(genre) {
+      this.message3 = `Looking for some songs in "${genre}"...`;
+      axios.get(`http://localhost:5001/genius/genre/${encodeURIComponent(genre)}`)
+          .then(response => {
+            this.message3 = '';
+            this.recommendation = response.data;
+          })
+          .catch(error => {
+            this.message3 = `Error searching for "${genre}"...`;
+            console.error("Error fetching lyrics:", error);
+          });
+    },
     created() {
       this.submitSearch();
       this.generalSearch();
+      this.playSong();
+      this.recommended();
     }
   },
 };
@@ -131,11 +165,18 @@ export default {
 </script>
 
 <style>
- .songcontainer {
-    display:flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    align-items: baseline;
+  .genreButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+ .songcontainerHome {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
   }
 
   ul {
@@ -143,21 +184,28 @@ export default {
   }
 
   img {
-    width: 150px;
+    width: 25%;
     border-radius: 4px;
     float: left;
     margin-right: 8px;
   }
 
-  .song {
-    display: block;
+  .songHome {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     margin: 4px;
-    align-self: center
   }
 
   li:first-child {
     color:black;
     font-weight: bold;
+  }
+
+  p{
+    color: #714EBB;
+    font-family: titleFont;
   }
 
 </style>
