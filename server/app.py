@@ -4,43 +4,29 @@
 # flask run --port=5001 --debug
 #
 
-from flask import Flask, jsonify, render_template, request, flash
+from flask import Flask, jsonify, render_template, request, flash, session
 from flask_cors import CORS
 from genius import *
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing import List, Optional
-from flask_login import LoginManager, UserMixin
 import os
-from datetime import datetime
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from flask_security import Security, SQLAlchemyUserDatastore, login_required, login_user, current_user, logout_user
 from flask_security.utils import hash_password, verify_password
 
 
 # instantiate the app
 app = Flask(__name__)
-login = LoginManager(app)
 app.config.from_object(__name__)
 
-app.config['SECRET_KEY'] = 'supersecret'  # Secret key for session management and JWT
-app.config['SECURITY_PASSWORD_SALT'] = 'salt'  # Salt for hashing passwords
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'SECRETKEYFORENCRYPTION'  # Secret key for JWT encoding
+SALT = os.urandom(32)
+app.config['SECURITY_PASSWORD_SALT'] = SALT  # Salt for hashing passwords
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
-
-# Celery and Redis configuration
-app.config.update(
-    CELERY_BROKER_URL='redis://localhost:6379',  # Redis as the message broker
-    result_backend='redis://localhost:6379'  # Redis as the result backend
-)
-
-# TODO: how to generate and store secure keys?
-SECRET_KEY = os.urandom(32)
-# app.config['SECRET_KEY'] = SECRET_KEY
 
 #
 # DATABASE
@@ -58,7 +44,6 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
-jwt = JWTManager(app)
 
 class Song(db.Model):
     __tablename__ = "songs"
@@ -80,19 +65,22 @@ class Song(db.Model):
         self.artist = artist
         self.img_path = img_path
         self.score = score
+        
+    def toJSON(self):
+        jason = {
+            'title': self.title,
+            'artist': self.artist,
+            'img_path': self.img_path,
+            'score': self.score
+        }
+        return jason
     
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = "users"
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(64), index=True, unique=True)
-    # email: Mapped[str] = mapped_column(String(120), index=True, unique=True) # ?
     password_hash: Mapped[Optional[str]] = mapped_column(String(256))
-    
-    # active: Mapped[bool] = mapped_column(Boolean)  # Indicates if the user's account is active
-    # fs_uniquifier: Mapped[str] = mapped_column(String(255))  # Unique identifier used by Flask-Security
-    # last_login: Mapped[datetime] = mapped_column(DateTime(timezone=True))  # Timestamp of the user's last login
-    # API_token: Mapped[str] = mapped_column(String, default=None)  # Stores the JWT token for API authentication
     
     # Understanding relationships:
     # https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html
@@ -101,21 +89,22 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
-    def __init__(self, username):
+    def __init__(self, username: str, password_hash: str = None):
         self.username = username
+        if password_hash:
+            self.password_hash = password_hash
+            
         
-# Setup Flask-Security
-# user_datastore = SQLAlchemyUserDatastore(db, User)
-# security = Security(app, user_datastore)
-    
-# TODO: leftover from werkzeug, delete?
-@login.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
+    def toJSON(self):
+        songs = []
+        for song in self.songs:
+            songs.append(song.toJSON())
+        jason = {
+            'username': self.username,
+            'songs': songs
+        }
+        return jason
 
-
-# test API call
-# kpArt = coverArt("Firework", "Katy Perry")
 
 # test song data from pre-database server testing
 SONGS = [
@@ -191,12 +180,38 @@ def setup():
 # ROUTES
 #
 
-# sanity check route 1
+    ### TESTING ROUTES, DELETE LATER
+@app.route('/test/user/<username>')
+def testuserquery(username = None):
+    user_data = User.query.filter_by(username=username).first()
+    return jsonify({
+        'status': 'success',
+        'user': user_data.toJSON()
+    })
+    
+@app.route('/test/login/<username>')
+def testlogin(username = None):
+    user_data = User.query.filter_by(username=username).first()
+    session['id'] = user_data.id
+    return f'logged in {user_data.username}'
+
+@app.route('/test/logout')
+def testlogout():
+    session.pop('id', None)
+    return 'success'
+
+@app.route('/test/getsong')
+def testsong():
+    if(session.get('id')):
+        user = db.session.get(User, session['id'])
+        asong = user.songs[0]
+        return asong.toJSON()
+    return 'not logged in!'
+    
 @app.route('/')
 def index():
     return "hello"
 
-# sanity check route 2, 
 @app.route('/ping', methods=['GET', 'POST'])
 def ping_pong():
     return jsonify('pong!')
@@ -208,9 +223,12 @@ def songs():
         'songs': SONGS
     })
 
-# alert("Searching for: "+ this.searchQuery); 
-# var x = this.searchQuery.value
-# x 
+@app.route('/admin')
+def admin():
+    all_users = db.session.query(User).all()
+    return render_template('admin.html', all_users = all_users)
+
+    ### GENIUS API ROUTES
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
@@ -218,21 +236,14 @@ def lyrics(title = None, artist = None):
         'status': 'success',
         'lyrics': songLyrics
     })
-    
-@app.route('/admin')
-def admin():
-    all_users = db.session.query(User).all()
-    return render_template('admin.html', all_users = all_users)
-
 
 @app.route('/genius/search/<term>', methods = ['GET', 'POST'])
 def searchSong(term = None):
     # parse data
     results = searchMulti(term)
     return results
-#
-# REST
-#
+
+# TODO: change this redundancy
 @app.route('/genius/search2/<term>', methods = ['GET', 'POST'])
 def searchSong2(term = None):
     # parse data
@@ -244,61 +255,59 @@ def searchGenre2(genre = None):
     # parse data
     results = searchGenre(genre)
     return results
-# @app.route('/login', methods=['POST'])
-# def home():
-#     username = request.form['username']
-#     email = request.form['email']
-#     password = request.form['password']
-#     user_data = User.query.filter_by(email=email).first()
-#     if user_data and verify_password(password, user_data.password):
-#         login_user(user_data)
-#         token = create_access_token(identity=user_data.username)  # Generate JWT token
-#         user_data.API_token = token
-#         user_data.last_login = datetime.now()
-#         db.session.commit()
-#         # success
-#         return jsonify({
-#             'status': 'success'
-#         })
-#     # wrong password, failure
-#     return jsonify({
-#             'status': 'failure',
-#             'message': 'wrong password'
-#         })
+
+    ### LOGIN SYSTEM
+@app.route('/login', methods=['POST'])
+def home():
+    username = request.form['username']
+    password = request.form['password']
+    user_data = User.query.filter_by(username=username).first()
+    if user_data and verify_password(password, user_data.password):
+        # success, add to session
+        session['id'] = user_data.id
+        return jsonify({
+            'status': 'success'
+        })
+    # wrong password, failure
+    return jsonify({
+            'status': 'failure',
+            'message': 'wrong password'
+        })
     
-# @app.route('/signup', methods=['POST'])
-# def signup():
-#     username = request.form['username']
-#     email = request.form['email']
-#     password = request.form['password']
-#     # Check if the username already exists
-#     if not User.query.filter_by(email=email).first() and not User.query.filter_by(username=username).first():
-#         new_user = user_datastore.create_user(
-#             email=email,
-#             username=username,
-#             password=hash_password(password),  # Securely hash the password
-#         )
-#         db.session.commit()
-#         return jsonify({
-#             'status': 'success'
-#         })
-#     return jsonify({
-#         'status': 'failure',
-#         'message': 'account already exists'
-#     })
+@app.route('/signup', methods=['POST'])
+def signup():
+    username = request.form['username']
+    password = request.form['password']
+    # Check if the username already exists
+    if not User.query.filter_by(username=username).first():
+        # create new user
+        new_user = User(username, hash_password(password))
+        db.session.add(new_user)
+        db.session.commit()
+        # add to session
+        session['id'] = new_user.id
+        return jsonify({
+            'status': 'success'
+        })
+    return jsonify({
+        'status': 'failure',
+        'message': 'account already exists'
+    })
     
-# @app.route('/logout', methods=['POST'])
-# def logout():
-#     logout_user()
-#     return jsonify({
-#         'status': 'success'
-#     })
+@app.route('/logout', methods=['POST'])
+def logout():
+    # remove from session
+    session.pop('id', None)
+    return jsonify({
+        'status': 'success'
+    })
 
 @app.route('/song/<id>', methods = ['GET', 'POST'])
 def addSong():
-    if(current_user):
-        return 'logged in'
-    return 'logged out'
+    if session.get('id'):
+        u = db.session.get(User, session['id'])
+    return
+    # find current user from session
     # search by id or artist/title?
     # GET: returns song json or "song not found"
     # -> all songs if nothing in <>?
