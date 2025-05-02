@@ -25,7 +25,8 @@
         </div>
     </div>
     </div>
-    <h2>Want to be recommended some songs? Select a genre</h2>
+    <h2>Want to be recommended some songs? Select a genre</h2> 
+    {{ message3 }}
     <div class = "genreButtons">
     <div v-for="genre in genres" :key="genre">
       <button @click="recommended(genre)">{{ genre }}</button>
@@ -33,9 +34,8 @@
   </div>
 
     <div class="songcontainerHome">
-      <p>{{ message3 }}</p>
       <div class = "songHome" v-for="item in recommendation" :key="item.title">
-          <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
+          <img style="width: 10%; background-color: aliceblue;" src="../assets/image.png" :alt="item.title">
           <ul>
             <p>{{ item.title }}</p>
             <p>{{ item.artist }}</p>
@@ -128,6 +128,7 @@ export default {
             store.commit('setLyrics', response.data.lyrics);
             store.commit('setTitle', title);
             store.commit('setArtist', artist);
+            store.commit('setCover', response.data.cover);
             this.$router.push({
               path: '/game'
             });

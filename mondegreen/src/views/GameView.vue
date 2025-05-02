@@ -1,6 +1,9 @@
 <template>
   <div class="game">
     <h1>Play Game</h1>
+    <div id="cover">
+      <img :src="cover" alt="Album Cover" />
+    </div>
     <h2>{{title}} by {{artist}}</h2>
     <p id="currScore">Current Score: 0</p>
     <p id="currTotalLyrics">Guessed Lyrics: 0/</p>
@@ -36,6 +39,8 @@ const route = useRoute();
 let lyrics = computed(() => store.getters.getLyrics);
 const title = computed(() => store.getters.getTitle);
 const artist = computed(() => store.getters.getArtist);
+const cover = computed(() => store.getters.getCover);
+
 
 lyrics.value = lyrics.value.replace(/_/g, ' ');
 const lyrics_array = lyrics.value.split(" ");

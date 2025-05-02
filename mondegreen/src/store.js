@@ -16,6 +16,9 @@ const store = createStore({
     setArtist(state, artist) {
       state.artist = artist;
     },
+    setCover(state, cover) {
+      state.cover = cover;
+    },
   },
   getters: {
     getLyrics(state) {
@@ -27,6 +30,9 @@ const store = createStore({
     getArtist(state) {
       return state.artist;
     },
+    getCover(state){
+      return state.cover;
+    }
   },
 });
 
