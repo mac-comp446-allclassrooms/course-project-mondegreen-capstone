@@ -12,6 +12,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/user">User Stats</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/register">Sign up</RouterLink>
       </nav>
     </div>
 <div>
@@ -19,15 +20,6 @@ import { RouterLink, RouterView } from 'vue-router'
     <component :is="Component" />
   </router-view>
 </div>
-    
-
-
-    Other links for now:
-    <footer>
-      <nav>
-        <RouterLink to="/register">Sign up</RouterLink>
-      </nav>
-    </footer>
     
 
   </div>
