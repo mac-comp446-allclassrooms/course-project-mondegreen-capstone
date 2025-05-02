@@ -25,6 +25,7 @@ export function playRound(song) {
     let totalWords = document.getElementById('currTotalLyrics')
     totalWords.textContent = "Guessed Lyrics: 0/" + game.song.length
     let lyricDivs = [];
+    let userGuesses = [];
     for (let i = 0; i < song.length; i++) {
         let newWordDiv = document.createElement('div');
         newWordDiv.className = "one_word"
@@ -32,24 +33,42 @@ export function playRound(song) {
         lyricDivs.push(newWordDiv);
         lyricsDiv.appendChild(newWordDiv);
     }
-    let guessButton = document.getElementById("guessButton");
     let guess = document.getElementById('guessInput');
-    guessButton.addEventListener('click', function click() {
+    guess.onkeyup = function() {
         guess = document.getElementById('guessInput');
         game.word = guess.value;
-        game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
-        scoreDiv.textContent = "Current Score: " + game.currScore;
-        guess.value = "";
-        totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
-        checkWin(game)
-    })
-    guess = document.getElementById('guessInput');
-    guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-        if (event.key === "Enter") {
-            event.preventDefault();
-            guessButton.click();
+        if (game.song.includes(game.word)) {
+            if (!userGuesses.includes(game.word)) {
+                game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
+                userGuesses.push(game.word);
+                guess.value = "";
+            } else {
+                let already_guessed = document.getElementById("already_guessed");
+                already_guessed.style.display = "block";
+                setTimeout(function() {
+                    already_guessed.style.display = "none";
+                    guess.value = "";
+                }, 2000);
+            }
+            scoreDiv.textContent = "Current Score: " + game.currScore;
+            // guess.value = "";
+            totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
+            checkWin(game)
+        } else {
+            guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    let not_lyrics = document.getElementById("not_lyrics");
+                    not_lyrics.style.display = "block";
+                    setTimeout(function() {
+                        not_lyrics.style.display = "none";
+                        guess.value = "";
+                    }, 2000);
+                }
+            });
+        
         }
-    })
+    }
 }
 
 function checkGuessedWord(song, word, lyricDivs, game) {
