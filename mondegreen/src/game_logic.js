@@ -29,7 +29,7 @@ export function playRound(song) {
     for (let i = 0; i < song.length; i++) {
         let newWordDiv = document.createElement('div');
         newWordDiv.className = "one_word"
-        newWordDiv.textContent = " ";
+        newWordDiv.textContent = "";
         lyricDivs.push(newWordDiv);
         lyricsDiv.appendChild(newWordDiv);
     }
@@ -44,11 +44,13 @@ export function playRound(song) {
                 guess.value = "";
             } else {
                 let already_guessed = document.getElementById("already_guessed");
-                already_guessed.style.display = "block";
+                setTimeout(function() {
+                    already_guessed.style.display = "block";
+                }, 1500);
                 setTimeout(function() {
                     already_guessed.style.display = "none";
                     guess.value = "";
-                }, 2000);
+                }, 4000);
             }
             scoreDiv.textContent = "Current Score: " + game.currScore;
             // guess.value = "";
@@ -66,9 +68,20 @@ export function playRound(song) {
                     }, 2000);
                 }
             });
-        
         }
     }
+    const hint_button = document.getElementById("hintButton");
+    hint_button.addEventListener('click', ()=> {
+        let randI = Math.floor(Math.random() * game.song.length); // used https://www.geeksforgeeks.org/how-to-select-a-random-element-from-array-in-javascript/
+        let randLyric = game.song[randI];
+        while (userGuesses.includes(randLyric)) {
+            randI = Math.floor(Math.random() * game.song.length);
+            randLyric = game.song[randI];
+        }
+        userGuesses.push(randLyric);
+        checkHintWord(song, randLyric, lyricDivs, game);
+        totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
+    });
 }
 
 function checkGuessedWord(song, word, lyricDivs, game) {
@@ -85,11 +98,22 @@ function checkGuessedWord(song, word, lyricDivs, game) {
     }
 }
 
+function checkHintWord(song, word, lyricDivs, game) {
+    const currIndexes = getAllIndexes(song, word);
+    for (let i = 0; i < currIndexes.length; i++) {
+        const index = currIndexes[i];
+        lyricDivs[index].textContent = word;
+        lyricDivs[index].style.backgroundColor = '#EDB9DD';
+        lyricDivs[index].style.color = '#0E60AD';
+    }
+    game.currGuessedWordsTotal += currIndexes.length;
+}
+
 function getScore(song, word, game) {
     // calculate how common word is in song
     let songOccurances = 0;
-    song.forEach(element => (element === word && songOccurances++ && game.currGuessedWordsTotal++)); // used https://stackoverflow.com/questions/37365512/count-the-number-of-times-a-same-value-appears-in-a-javascript-array
-    game.currGuessedWordsTotal++;
+    song.forEach(element => (element === word && songOccurances++)); // used https://stackoverflow.com/questions/37365512/count-the-number-of-times-a-same-value-appears-in-a-javascript-array
+    game.currGuessedWordsTotal += songOccurances;
     let songRatio = songOccurances/song.length;
     // calculate how common word is in English
     let engOccurances = 0;

@@ -118,7 +118,15 @@ button {
   font-family: Verdana;
   border-width: 0;
   background-color: #EDB9DD;
-	box-shadow: 1px 1px 3px #875578;
+	box-shadow: 1px 3px 2px #ba6ea3;
+}
+
+button:hover {background-color: #d48abc}
+
+button:active {
+  background-color: #d48abc;
+  box-shadow: 1px 2px 2px #ba6ea3;
+  transform: translateY(1px);
 }
 
 .one_word {
