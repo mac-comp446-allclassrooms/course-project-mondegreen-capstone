@@ -20,12 +20,15 @@
             <ul>
               <p>{{ item.title }}</p>
               <p>{{ item.artist }}</p>
+              <button @click="playSong(item,item.title,item.artist,false)">Play Song</button>
+              {{ message5 }}
             </ul>
-            <button @click="playSong(item.title,item.artist)">Play Song</button>
+            
         </div>
     </div>
     </div>
-    <h2>Want to be recommended some songs? Select a genre</h2>
+    <h2>Want to be recommended some songs? Select a genre</h2> 
+    {{ message3 }}
     <div class = "genreButtons">
     <div v-for="genre in genres" :key="genre">
       <button @click="recommended(genre)">{{ genre }}</button>
@@ -33,14 +36,15 @@
   </div>
 
     <div class="songcontainerHome">
-      <p>{{ message3 }}</p>
       <div class = "songHome" v-for="item in recommendation" :key="item.title">
-          <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
+          <img style="width: 10%; background-color: aliceblue;" src="../assets/image.png" :alt="item.title">
           <ul>
             <p>{{ item.title }}</p>
             <p>{{ item.artist }}</p>
+            <button @click="playSong(item,item.title,item.artist,true)">Play Song</button>
+            {{ message5 }}
           </ul>
-          <button @click="playSong(item.title,item.artist)">Play Song</button>
+          
       </div>
     </div>
     <p>Just starting?</p>
@@ -66,6 +70,7 @@ export default {
       genres: ["rap", "pop", "r-b", "rock", "country", "non-music"],
       message3: "",
       recommendation: [],
+      message5: "",
     };
   },
   methods: {
@@ -74,6 +79,7 @@ export default {
       const title = this.searchTitle.trim();
       const artist = this.searchArtist.trim();
       this.message = `Searching for "${title}" by "${artist}"...`;
+      
 
       if (title && artist) {
         axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
@@ -103,11 +109,15 @@ export default {
       // song name
       const title = this.searchGeneral.trim();
       this.message2 = `Searching for "${title}"...`;
+      this.message2 = '';
+      this.message3 = '';
+      this.message5 = '';
 
       if (title) {
         axios.get(`http://localhost:5001/genius/search2/${encodeURIComponent(title)}`)
           .then(response => {
             this.scores = response.data;
+            this.message2 = '';
           })
           .catch(error => {
             this.message2 = `Error searching for "${title}"...`;
@@ -117,9 +127,16 @@ export default {
         alert("Please enter a song title.");
       }
     }, 
-    playSong(title, artist) {
+    playSong(item,title, artist,recommendBool) {
       this.message2 = '';
-      this.message2 = `Starting game: "${title}" by "${artist}"...`;
+      this.message5 = `Starting game: "${title}" by "${artist}"...`;
+      if (recommendBool === true) {
+        this.recommendation = [item];
+        this.scores = [];
+      } else {
+        this.recommendation = [];
+        this.scores = [item];
+      }
 
       if (title && artist) {
         axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
@@ -128,12 +145,13 @@ export default {
             store.commit('setLyrics', response.data.lyrics);
             store.commit('setTitle', title);
             store.commit('setArtist', artist);
+            store.commit('setCover', response.data.cover);
             this.$router.push({
               path: '/game'
             });
           })
           .catch(error => {
-            this.message2 = `Error starting game for "${title}" by "${artist}"...`;
+            this.message5 = `Error starting game for "${title}" by "${artist}"...`;
             console.error("Error fetching lyrics:", error);
           });
       } else {
@@ -141,6 +159,8 @@ export default {
       }
     },
     recommended(genre) {
+      this.message2 = '';
+      this.message5 = '';
       this.message3 = `Looking for some songs in "${genre}"...`;
       axios.get(`http://localhost:5001/genius/genre/${encodeURIComponent(genre)}`)
           .then(response => {

@@ -92,6 +92,7 @@ body {
 
 * {
   background-color: #D0F5E8;
+  font-family: titleFont;
 }
 
 h1 {
@@ -109,6 +110,7 @@ input {
   background-color: white;
   border-width: 0;
   margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 button {
@@ -125,6 +127,7 @@ button {
   padding: 5%;
   text-align: center;
   border-radius: 5px;
+  min-height: 25px;
 }
 
 .game {

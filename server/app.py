@@ -243,9 +243,11 @@ def admin():
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
+    songCover = getCover(title, artist)
     return jsonify({
         'status': 'success',
-        'lyrics': songLyrics
+        'lyrics': songLyrics,
+        'cover': songCover
     })
 
 @app.route('/genius/search/<term>', methods = ['GET', 'POST'])

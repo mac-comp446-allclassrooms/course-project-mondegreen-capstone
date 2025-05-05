@@ -111,7 +111,7 @@ def searchGenre(genre):
     for song in songs:
         song_data = {
         'title' : song['title'],
-        'artist' : song['artists']
+        'artist' : song['artists'][0]
         }
 
         results.append(song_data)
@@ -119,3 +119,9 @@ def searchGenre(genre):
     return results
 
 # print(searchGenre("pop"))
+
+def getCover(title, artist):
+    song = genius.search_song(title, artist)
+    if song:
+        return song.song_art_image_thumbnail_url
+    return "Cover not found"
