@@ -153,8 +153,9 @@ button:active {
   border-radius: 8px;
 }
 
-#win_game {
-  position: absolute;
+#win_game, #quit_game {
+  position: sticky;
+  top: 0;
   width: 70%;
   height: 30%;
   background: hsla(160, 100%, 37%, 1);
@@ -162,6 +163,7 @@ button:active {
   margin: auto;
   padding: 5%;
   text-align: center;
+  
 }
 
 #score_p {

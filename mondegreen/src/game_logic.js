@@ -82,6 +82,17 @@ export function playRound(song) {
         checkHintWord(song, randLyric, lyricDivs, game);
         totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
     });
+    const quit_button = document.getElementById("quitButton");
+    quit_button.addEventListener('click', ()=> {
+        const quitDiv = document.getElementById('quit_game');
+        quitDiv.style.display = "block";
+        const scoreP = document.getElementById('score_pQ');
+        scoreP.textContent = game.currScore;
+        const homeButton = document.getElementById('homeButtonQ');
+        homeButton.addEventListener('click', ()=> {
+            router.push('/');
+        });
+    });
 }
 
 function checkGuessedWord(song, word, lyricDivs, game) {

@@ -44,7 +44,6 @@
             <button @click="playSong(item,item.title,item.artist,true)">Play Song</button>
             {{ message5 }}
           </ul>
-          
       </div>
     </div>
     <p>Just starting?</p>
@@ -109,7 +108,6 @@ export default {
       // song name
       const title = this.searchGeneral.trim();
       this.message2 = `Searching for "${title}"...`;
-      this.message2 = '';
       this.message3 = '';
       this.message5 = '';
 
@@ -195,8 +193,7 @@ export default {
  .songcontainerHome {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  align-content: center;
+  align-content: flex-start;
   }
 
   ul {
@@ -204,7 +201,7 @@ export default {
   }
 
   img {
-    width: 25%;
+    width: 150px;
     border-radius: 4px;
     float: left;
     margin-right: 8px;
@@ -213,8 +210,6 @@ export default {
   .songHome {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     margin: 4px;
   }
 
