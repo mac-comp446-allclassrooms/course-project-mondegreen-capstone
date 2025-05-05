@@ -4,16 +4,15 @@
 # flask run --port=5001 --debug
 #
 
-from flask import Flask, jsonify, render_template, request, flash, session
+from flask import Flask, jsonify, render_template, request, session
 from flask_cors import CORS
 from genius import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, select
+from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing import List, Optional
 import os
 from flask_security.utils import hash_password, verify_password
-
 
 # instantiate the app
 app = Flask(__name__)
@@ -92,8 +91,7 @@ class User(db.Model):
     def __init__(self, username: str, password_hash: str = None):
         self.username = username
         if password_hash:
-            self.password_hash = password_hash
-            
+            self.password_hash = password_hash    
         
     def toJSON(self):
         songs = []
@@ -105,6 +103,18 @@ class User(db.Model):
         }
         return jason
 
+def createSong(title: str, artist: str, score: int):
+    img_path = coverArt(title, artist)
+    new_song = Song(title, artist, img_path, score)
+    
+    active_user = db.session.get(User, session['id'])
+    active_user.songs.append(new_song)
+    db.session.commit()
+    
+def editSong(id: int, score: int):
+    song = db.session.get(Song, id)
+    song.score = score
+    db.session.commit()
 
 # test song data from pre-database server testing
 SONGS = [
@@ -176,6 +186,7 @@ def setup():
                 )
             db.session.add(u)
             db.session.commit()
+
 #
 # ROUTES
 #
@@ -304,9 +315,44 @@ def logout():
 
 @app.route('/song/<id>', methods = ['GET', 'POST'])
 def addSong():
-    if session.get('id'):
-        u = db.session.get(User, session['id'])
-    return
+    if request.method == 'GET':
+        if session.get('id'):
+            u = db.session.get(User, session['id'])
+            if False: # query songs here
+                return 'found' # return song here
+            return jsonify({
+                'status': 'failure',
+                'message': 'song not found'
+            })
+        return jsonify({
+            'status': 'failure',
+            'message': 'not logged in'
+        })
+    if request.method == 'POST':
+        if session.get('id'):
+            u = db.session.get(User, session['id'])
+            
+            data = request.get_json()
+            # query song table for: user id, song title, and artist
+            if False: # if the song exists
+                # update song
+                editSong(id = 0, score = 0)
+                return jsonify({
+                    'status': 'success',
+                    'message': 'update song'
+                })
+            createSong(title = '', artist = '', score = 0)
+            
+            return jsonify({
+                'status': 'success',
+                'message': 'new song'
+            })
+        
+        return jsonify({
+            'status': 'failure',
+            'message': 'not logged in'
+        })
+                    
     # find current user from session
     # search by id or artist/title?
     # GET: returns song json or "song not found"
