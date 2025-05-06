@@ -5,15 +5,15 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div id="app">
     <div id="wrapper">
-      <h1>Mondegreen</h1>
+      <h1><em>Those</em> are the lyrics?</h1>
 
-      <nav>
+      <!-- <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/user">User Stats</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
         <RouterLink to="/register">Sign up</RouterLink>
-      </nav>
+      </nav> -->
     </div>
 <div>
   <router-view v-slot="{ Component }">

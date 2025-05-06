@@ -1,6 +1,5 @@
 <template>
   <div class="game">
-    <h1>Play Game</h1>
     <div id="cover">
       <img :src="cover" alt="Album Cover" />
     </div>
