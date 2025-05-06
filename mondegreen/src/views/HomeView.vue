@@ -47,7 +47,7 @@
       </div>
     </div>
     <p>Just starting?</p>
-    <router-link to="/howto">
+    <router-link to="/howto" aria-label="How to play">
       <button>How to play</button>
     </router-link>
   </main>
