@@ -172,3 +172,8 @@ button:active {
   font-size: x-large;
   text-align: center;
 }
+
+#already_guessed, #not_lyrics, #guessLabel, #guessInput {
+  display: flex;
+  justify-content: flex-start;
+}

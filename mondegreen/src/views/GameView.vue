@@ -26,11 +26,11 @@
     </div>
   </div>
     <form>
-      <label name="guess">Enter Lyric: </label>
+      <label name="guess" id="guessLabel">Enter Lyric: </label>
       <input type="text" name="guess" id="guessInput">
+      <p id="already_guessed" style="display:none;">Already Guessed</p>
+      <p id="not_lyrics" style="display:none;">Not in Lyrics</p>
     </form>
-    <p id="already_guessed" style="display:none;">Already Guessed</p>
-    <p id="not_lyrics" style="display:none;">Not in Lyrics</p>
     <button type="button" id="hintButton">Hint</button>
     <button type="button" id="quitButton">Give up</button>
     <div id="lyrics">
@@ -57,6 +57,7 @@ const cover = computed(() => store.getters.getCover);
 lyrics.value = lyrics.value.replace(/_/g, ' ');
 const lyrics_array = lyrics.value.split(" ");
 lyrics_array.shift();
+lyrics_array.id = "array"
 console.log(lyrics_array);
 console.log(lyrics.value);
 
@@ -65,6 +66,10 @@ onMounted(() => {
     alert("Lyrics not found")
   } else {
     playRound(lyrics_array);
+    document.getElementbyId("array");
+    let arrayDiv = document.createElement('div');
+    arrayDiv.textContent = lyrics_array;
+    document.appendChild(arrayDiv);
   }
 });
 function copyToClipboardQuit() {

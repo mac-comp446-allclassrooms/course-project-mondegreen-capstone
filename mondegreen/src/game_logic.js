@@ -35,40 +35,53 @@ export function playRound(song) {
     }
     let guess = document.getElementById('guessInput');
     guess.onkeyup = function() {
-        guess = document.getElementById('guessInput');
-        game.word = guess.value;
-        if (game.song.includes(game.word)) {
-            if (!userGuesses.includes(game.word)) {
-                game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
-                userGuesses.push(game.word);
-                guess.value = "";
-            } else {
-                let already_guessed = document.getElementById("already_guessed");
-                setTimeout(function() {
-                    already_guessed.style.display = "block";
-                }, 1500);
-                setTimeout(function() {
-                    already_guessed.style.display = "none";
-                    guess.value = "";
-                }, 4000);
-            }
-            scoreDiv.textContent = "Current Score: " + game.currScore;
-            // guess.value = "";
-            totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
-            checkWin(game)
-        } else {
-            guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    let not_lyrics = document.getElementById("not_lyrics");
-                    not_lyrics.style.display = "block";
+        // setTimeout(function() {
+            guess = document.getElementById('guessInput');
+            game.word = guess.value.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, ''); // used https://www.geeksforgeeks.org/how-to-remove-punctuation-from-text-using-javascript/;
+            if (game.song.includes(game.word)) {
+                if (!userGuesses.includes(game.word)) {
+                    game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
+                    userGuesses.push(game.word);
                     setTimeout(function() {
-                        not_lyrics.style.display = "none";
                         guess.value = "";
-                    }, 2000);
+                    }, 200);
+                } else {
+                    guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+                        if (event.key === "Enter" && game.song.includes(game.word)) {
+                            const temp_word = game.word;
+                            event.preventDefault();
+                            let already_guessed = document.getElementById("already_guessed");
+                            already_guessed.style.display = "block";
+                            setTimeout(function() {
+                                already_guessed.style.display = "none";
+                                if (guess.value === temp_word) {
+                                    guess.value = "";
+                                }
+                            }, 2000);
+                        }
+                    });
                 }
-            });
-        }
+                scoreDiv.textContent = "Current Score: " + game.currScore;
+                // guess.value = "";
+                totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
+                checkWin(game)
+            } else {
+                guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+                    if (event.key === "Enter" && !game.song.includes(game.word)) {
+                        const temp_word = game.word;
+                        event.preventDefault();
+                        let not_lyrics = document.getElementById("not_lyrics");
+                        not_lyrics.style.display = "block";
+                        setTimeout(function() {
+                            not_lyrics.style.display = "none";
+                            if (guess.value === temp_word) {
+                                guess.value = "";
+                            }
+                        }, 2000);
+                    }
+                });
+            }
+        // }, 500);
     }
     const hint_button = document.getElementById("hintButton");
     hint_button.addEventListener('click', ()=> {
