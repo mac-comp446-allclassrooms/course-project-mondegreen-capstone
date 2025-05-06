@@ -118,13 +118,17 @@ button {
   font-family: Verdana;
   border-width: 0;
   background-color: #EDB9DD;
-	box-shadow: 0px 3px 0px #ba6ea3;
+}
+
+button:not(.genre) {
+  background-color: #EDB9DD;
+  box-shadow: 0px 3px 0px #ba6ea3;
 }
 
 /* used https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_buttons_animate3 */
-button:hover {background-color: #d48abc} 
+button:not(.genre):hover {background-color: #d48abc} 
 
-button:active {
+button:not(.genre):active {
   background-color: #d48abc;
   box-shadow: 0px 2px 0px #9c4982;
   transform: translateY(1px);
@@ -173,7 +177,24 @@ button:active {
   text-align: center;
 }
 
-#already_guessed, #not_lyrics, #guessLabel, #guessInput {
-  display: flex;
-  justify-content: flex-start;
+.genre {
+  padding: 20px;
+  gap: 10px;
+  width: 15vw;
+  text-align: center;
+  background-color: #8cc2f5;
+  box-shadow: 0px 3px 0px #4d8ec9;
+}
+
+.genre:hover {background-color: #67B0F5} 
+
+.genre:active {
+  background-color: #67B0F5;
+  box-shadow: 0px 2px 0px #306fab;
+  transform: translateY(1px);
+}
+
+.genreButtons {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }

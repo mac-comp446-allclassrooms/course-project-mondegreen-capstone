@@ -1,7 +1,6 @@
 <template>
   <main>
-    <h1>Those are the lyrics?</h1>
-    <p>Search for a song</p>
+    <h2>Search for a song:</h2>
     <!-- <div>
       <input type="text" v-model="searchTitle" placeholder="Enter song" />
       <input v-on:keyup.enter="submitSearch" type="text" v-model="searchArtist" placeholder="Enter artist" />
@@ -27,11 +26,13 @@
         </div>
     </div>
     </div>
-    <h2>Want to be recommended some songs? Select a genre</h2> 
-    {{ message3 }}
-    <div class = "genreButtons">
-    <div v-for="genre in genres" :key="genre">
-      <button @click="recommended(genre)">{{ genre }}</button>
+    <div id="recs" v-if="showRecs">
+      <h3>Want to be recommended some songs? Select a genre:</h3> 
+      {{ message3 }}
+      <div class = "genreButtons">
+      <div v-for="[key,value] in Object.entries(genres)" :key="key">
+        <button class="genre" @click="recommended(key, value)">{{ value }}</button>
+      </div>
     </div>
   </div>
 
@@ -66,10 +67,18 @@ export default {
       message: "",
       message2: "",
       scores: [],
-      genres: ["rap", "pop", "r-b", "rock", "country", "non-music"],
+      genres: {
+        "rap": "Rap",
+        "pop": "Pop",
+        "r-b": "R & B",
+        "rock": "Rock",
+        "country": "Country",
+        "non-music": "Non-Music"
+      },
       message3: "",
       recommendation: [],
       message5: "",
+      showRecs: true,
     };
   },
   methods: {
@@ -126,6 +135,7 @@ export default {
       }
     }, 
     playSong(item,title, artist,recommendBool) {
+      this.showRecs = false;
       this.message2 = '';
       this.message5 = `Starting game: "${title}" by "${artist}"...`;
       if (recommendBool === true) {
@@ -156,10 +166,10 @@ export default {
         alert("Something went wrong. Please try again.");
       }
     },
-    recommended(genre) {
+    recommended(genre, label) {
       this.message2 = '';
       this.message5 = '';
-      this.message3 = `Looking for some songs in "${genre}"...`;
+      this.message3 = `Looking for some songs in "${label}"...`;
       axios.get(`http://localhost:5001/genius/genre/${encodeURIComponent(genre)}`)
           .then(response => {
             this.message3 = '';
