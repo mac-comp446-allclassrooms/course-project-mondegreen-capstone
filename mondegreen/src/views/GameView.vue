@@ -1,41 +1,47 @@
 <template>
   <div class="game">
-    <div id="cover">
-      <img :src="cover" alt="Album Cover" />
+    <div class="game_base">
+      <div id="cover" class="item1">
+        <img :src="cover" alt="Album Cover" />
+      </div>
+      <h2 class="item2">{{title}} by {{artist}}</h2>
+      <p id="currScore" class="item3">Current Score: 0</p>
+      <p id="currTotalLyrics" class="item4">Guessed Lyrics: 0/</p>
+      <form class="item5">
+        <label name="guess" id="guessLabel" class="item6">Enter Lyric: </label>
+        <input type="text" name="guess" id="guessInput" class="item7">
+        <p id="already_guessed" style="visibility:hidden;" class="item8">Already Guessed</p>
+        <p id="not_lyrics" style="visibility:hidden;" class="item8">Not in Lyrics</p>
+      </form>
+      <button type="button" id="hintButton" class="item9">Hint</button>
+      <button type="button" id="quitButton" class="item10">Give up</button>
+      
     </div>
-    <h2>{{title}} by {{artist}}</h2>
-    <p id="currScore">Current Score: 0</p>
-    <p id="currTotalLyrics">Guessed Lyrics: 0/</p>
-    <div id="win_game" style="display:none;">
-    <h2>Congrats! You did it!</h2>
-    <p>Your Score:</p>
-    <p id="score_p"></p>
-    <div>
-      <button type="button" id="homeButton">Try Another Song</button>
-      <button type="button" id="shareButton" @click="copyToClipboardWin">Share Results</button>
+    <div id="lyrics" class="item11">
+        <div></div>
+      </div>
+    <div class="popup">
+      <div id="win_game" style="display:none;">
+        <h2>Congrats! You did it!</h2>
+        <p>Your Score:</p>
+        <p id="score_p"></p>
+        <div>
+          <button type="button" id="homeButton">Try Another Song</button>
+          <button type="button" id="shareButton" @click="copyToClipboardWin">Share Results</button>
+        </div>
+      </div>
+      <div id="quit_game" style="display:none;">
+        <h2>;-; Try again next time!</h2>
+        <p>Your Score:</p>
+        <p id="score_pQ"></p>
+        <div>
+          <button type="button" id="homeButtonQ">Try Another Song</button>
+          <button type="button" id="shareButtonQ" @click="copyToClipboardQuit">Share Results</button>
+        </div>
+      </div>
     </div>
   </div>
-  <div id="quit_game" style="display:none;">
-    <h2>;-; Try again next time!</h2>
-    <p>Your Score:</p>
-    <p id="score_pQ"></p>
-    <div>
-      <button type="button" id="homeButtonQ">Try Another Song</button>
-      <button type="button" id="shareButtonQ" @click="copyToClipboardQuit">Share Results</button>
-    </div>
-  </div>
-    <form>
-      <label name="guess" id="guessLabel">Enter Lyric: </label>
-      <input type="text" name="guess" id="guessInput">
-      <p id="already_guessed" style="display:none;">Already Guessed</p>
-      <p id="not_lyrics" style="display:none;">Not in Lyrics</p>
-    </form>
-    <button type="button" id="hintButton">Hint</button>
-    <button type="button" id="quitButton">Give up</button>
-    <div id="lyrics">
-      <div></div>
-    </div>
-  </div>
+
   
 </template>
 

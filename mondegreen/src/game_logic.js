@@ -51,9 +51,9 @@ export function playRound(song) {
                             const temp_word = game.word;
                             event.preventDefault();
                             let already_guessed = document.getElementById("already_guessed");
-                            already_guessed.style.display = "block";
+                            already_guessed.style.visibility = "visible";
                             setTimeout(function() {
-                                already_guessed.style.display = "none";
+                                already_guessed.style.visibility = "hidden";
                                 if (guess.value === temp_word) {
                                     guess.value = "";
                                 }
@@ -71,9 +71,9 @@ export function playRound(song) {
                         const temp_word = game.word;
                         event.preventDefault();
                         let not_lyrics = document.getElementById("not_lyrics");
-                        not_lyrics.style.display = "block";
+                        not_lyrics.style.visibility = "visible";
                         setTimeout(function() {
-                            not_lyrics.style.display = "none";
+                            not_lyrics.style.visibility = "hidden";
                             if (guess.value === temp_word) {
                                 guess.value = "";
                             }
