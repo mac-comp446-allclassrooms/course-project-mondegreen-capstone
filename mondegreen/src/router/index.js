@@ -4,7 +4,6 @@ import SongView from '../views/StatsView.vue'
 import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
 import HowToView from '../views/HowToView.vue'
-import SignupView from '../views/SignupView.vue'
 import GameView from '../views/GameView.vue'
 
 const router = createRouter({
@@ -39,11 +38,6 @@ const router = createRouter({
       path: '/howto',
       name: 'howto',
       component: HowToView,
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: SignupView,
     },
   ],
 })

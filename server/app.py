@@ -4,7 +4,7 @@
 # flask run --port=5001 --debug
 #
 
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from genius import *
 from flask_sqlalchemy import SQLAlchemy
@@ -18,15 +18,8 @@ from werkzeug.security import generate_password_hash as hash_password, check_pas
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-# SALT = os.urandom(32)
-# app.config['SECURITY_PASSWORD_SALT'] = SALT  # Salt for hashing passwords
-
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
-
-# app.config['SECURITY_PASSWORD_HASH'] = 'bcrypt'
-
-# app.config['SECURITY_PASSWORD_SINGLE_HASH'] = ['bcrypt']
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
@@ -107,11 +100,11 @@ class User(db.Model):
         }
         return jason
 
-def createSong(title: str, artist: str, score: int):
+def createSong(title: str, artist: str, score: int, user_id: int):
     img_path = coverArt(title, artist)
     new_song = Song(title, artist, img_path, score)
     
-    active_user = db.session.get(User, session['id'])
+    active_user = db.session.get(User, user_id)
     active_user.songs.append(new_song)
     db.session.commit()
     
@@ -194,34 +187,6 @@ def setup():
 #
 # ROUTES
 #
-
-    ### TESTING ROUTES, DELETE LATER
-@app.route('/test/user/<username>')
-def testuserquery(username = None):
-    user_data = User.query.filter_by(username=username).first()
-    return jsonify({
-        'status': 'success',
-        'user': user_data.toJSON()
-    })
-    
-@app.route('/test/login/<username>')
-def testlogin(username = None):
-    user_data = User.query.filter_by(username=username).first()
-    session['id'] = user_data.id
-    return f'logged in {user_data.username}'
-
-@app.route('/test/logout')
-def testlogout():
-    session.pop('id', None)
-    return 'success'
-
-@app.route('/test/getsong')
-def testsong():
-    if(session.get('id')):
-        user = db.session.get(User, session['id'])
-        asong = user.songs[0]
-        return asong.toJSON()
-    return 'not logged in!'
     
 @app.route('/')
 def index():
@@ -242,13 +207,6 @@ def songs():
 def admin():
     all_users = db.session.query(User).all()
     return render_template('admin.html', all_users = all_users)
-
-@app.route('/post/malone', methods=['POST'])
-def testPost():
-    print(request.json)
-    return jsonify({
-        'status': 'success'
-    })
 
     ### GENIUS API ROUTES
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
@@ -288,13 +246,16 @@ def home():
     password = data['password']
     
     user_data = User.query.filter_by(username=username).first()
-    if user_data and verify_password(password, user_data.password):
+    if user_data and verify_password(pwhash=user_data.password_hash, password=password):
         # success, add to session
-        session['id'] = user_data.id
+        userid =  user_data.id
+        print('user ' + user_data.username + ' logged in')
         return jsonify({
-            'status': 'success'
+            'status': 'success',
+            'id': userid # TODO: BAD BAD SECURITY
         })
     # wrong password, failure
+    print('wrong password for login attempt ' + username)
     return jsonify({
             'status': 'failure',
             'message': 'wrong password'
@@ -312,9 +273,10 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         # add to session
-        session['id'] = new_user.id
+        userid = new_user.id
         return jsonify({
-            'status': 'success'
+            'status': 'success',
+            'id': userid # TODO: BAD BAD SECURITY
         })
     return jsonify({
         'status': 'failure',
@@ -323,58 +285,40 @@ def signup():
     
 @app.route('/logout', methods=['POST'])
 def logout():
-    # remove from session
-    session.pop('id', None)
+    # actually does nothing because of,, reasons
     return jsonify({
         'status': 'success'
     })
 
 @app.route('/song/<id>', methods = ['GET', 'POST'])
 def addSong():
-    if request.method == 'GET':
-        if session.get('id'):
-            u = db.session.get(User, session['id'])
-            if False: # query songs here
-                return 'found' # return song here
+    if request.method == 'POST':
+        data = request.get_json()
+        userid = data['id']
+        title = data['title']
+        artist = data['artist']
+        score = data['score']
+        u = db.session.get(User, userid)
+        
+        if(not u):
             return jsonify({
                 'status': 'failure',
-                'message': 'song not found'
+                'message': 'user not found'
             })
-        return jsonify({
-            'status': 'failure',
-            'message': 'not logged in'
-        })
-    if request.method == 'POST':
-        if session.get('id'):
-            u = db.session.get(User, session['id'])
-            
-            data = request.get_json()
-            # query song table for: user id, song title, and artist
-            if False: # if the song exists
-                # update song
-                editSong(id = 0, score = 0)
-                return jsonify({
-                    'status': 'success',
-                    'message': 'update song'
-                })
-            createSong(title = '', artist = '', score = 0)
-            
+        # query song table for: user id, song title, and artist
+        song = Song.query.filter_by(user_id = userid).filter_by(title = title).filter_by(artist = artist).first()
+ 
+        if song: # if the song exists
+            editSong(id = song.id, score = score)
             return jsonify({
+                'status': 'success',
+                'message': 'update song'
+            })
+        createSong(title = title, artist = artist, score = score, user_id = userid)
+        return jsonify({
                 'status': 'success',
                 'message': 'new song'
             })
-        
-        return jsonify({
-            'status': 'failure',
-            'message': 'not logged in'
-        })
-                    
-    # find current user from session
-    # search by id or artist/title?
-    # GET: returns song json or "song not found"
-    # -> all songs if nothing in <>?
-    # POST: adds if new or updates if not new
-    # don't need a delete functionality from the frontend, admin interface could have delete for debugging
 
 #
 # RUN

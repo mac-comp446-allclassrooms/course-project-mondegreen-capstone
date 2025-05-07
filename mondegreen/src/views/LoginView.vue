@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1>{{ isLogin ? "Log In" : "Create Account" }}</h1>
+    <h1>{{ loggedIn ? "Log Out" : (isLogin ? "Log In" : "Create Account") }}</h1>
     <form @submit.prevent="handleActions">
+      <div v-if="!loggedIn">
         <label for="username">Username:</label>
         <input type="text" id="username" v-model="unField"/>
         <br>
@@ -10,10 +11,11 @@
         <br>
         <div v-if="!isLogin">
           <label for="passwordC" class="signup">Confirm Password:</label>
-          <input type="passwordC" id="passwordC" v-model="conField"/>
+          <input type="password" id="passwordC" v-model="conField"/>
         </div>
-        <br class="signup hidden">
-      <button type="submit">{{ isLogin ? "Log In" : "Create Account" }}</button>
+        <br>
+      </div>
+      <button type="submit">{{ loggedIn ? "Log Out" : (isLogin ? "Log In" : "Create Account") }}</button>
       <button @click="toggleButton">{{ isLogin ? "Go to Sign up" : "Go to Log In" }}</button>
     </form>
   </div>
@@ -37,12 +39,12 @@
     },
     methods: {
       login(payload) {
-        const path = 'http://localhost:5001/post/malone';
+        const path = 'http://localhost:5001/login';
         axios.post(path, payload)
-        .then(function (response) {
-          handleResponse(response);
+        .then((response) => {
+          this.loginResponse(response);
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
       },
@@ -50,14 +52,14 @@
         const path = 'http://localhost:5001/signup';
         axios.post(path, payload)
         .then(function (response) {
-          handleResponse(response);
+          this.loginResponse(response);
         })
         .catch(function (error) {
           console.log(error);
         });
       },
       handleActions() {
-        if(false) {
+        if(this.loggedIn) {
           this.logout();
         }
 
@@ -68,6 +70,7 @@
           const con = this.conField.trim();
           if (con !== pw) {
             this.message = 'Passwords must match!';
+            return;
           }
         }
 
@@ -85,12 +88,20 @@
           this.message = 'Username and password must contain only alphanumeric characters!'
         }
       },
-      handleResponse(response) {
+      loginResponse(response) {
+        console.log(response.data, " from loginResponse");
         if (response.data.status === 'success') {
           this.message = 'logged in';
           this.loggedIn = true;
-        } else {
+          id = response.data.id
+          this.$router.push({
+            name: "id",
+            params: {id}
+          });
+        } else if (response.data.status === 'failure') {
           this.message = response.data.message;
+        } else {
+          this.message = 'unknown error!'
         }
       },
       verifyInput(str) {
@@ -110,6 +121,7 @@
         .catch(function (error) {
           console.log(error);
         });
+        this.loggedIn = false;
       },
       toggleButton() {
         this.isLogin = !this.isLogin;
@@ -119,3 +131,9 @@
     },
   };
 </script>
+
+<style>
+  button {
+    margin: 4px;
+  }
+</style>
