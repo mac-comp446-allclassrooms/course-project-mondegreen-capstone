@@ -125,6 +125,3 @@ def getCover(title, artist):
     if song:
         return song.song_art_image_thumbnail_url
     return "Cover not found"
-
-song = genius.search_song("Twinkle, Twinkle Little Star", "Children Songs")
-print(song.lyrics)

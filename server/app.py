@@ -12,17 +12,21 @@ from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing import List, Optional
 import os
-from flask_security.utils import hash_password, verify_password
+from werkzeug.security import generate_password_hash as hash_password, check_password_hash as verify_password
 
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-SALT = os.urandom(32)
-app.config['SECURITY_PASSWORD_SALT'] = SALT  # Salt for hashing passwords
+# SALT = os.urandom(32)
+# app.config['SECURITY_PASSWORD_SALT'] = SALT  # Salt for hashing passwords
 
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# app.config['SECURITY_PASSWORD_HASH'] = 'bcrypt'
+
+# app.config['SECURITY_PASSWORD_SINGLE_HASH'] = ['bcrypt']
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
@@ -239,6 +243,13 @@ def admin():
     all_users = db.session.query(User).all()
     return render_template('admin.html', all_users = all_users)
 
+@app.route('/post/malone', methods=['POST'])
+def testPost():
+    print(request.json)
+    return jsonify({
+        'status': 'success'
+    })
+
     ### GENIUS API ROUTES
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
@@ -272,8 +283,10 @@ def searchGenre2(genre = None):
     ### LOGIN SYSTEM
 @app.route('/login', methods=['POST'])
 def home():
-    username = request.form['username']
-    password = request.form['password']
+    data = request.json
+    username = data['username']
+    password = data['password']
+    
     user_data = User.query.filter_by(username=username).first()
     if user_data and verify_password(password, user_data.password):
         # success, add to session
@@ -289,8 +302,9 @@ def home():
     
 @app.route('/signup', methods=['POST'])
 def signup():
-    username = request.form['username']
-    password = request.form['password']
+    data = request.json
+    username = data['username']
+    password = data['password']
     # Check if the username already exists
     if not User.query.filter_by(username=username).first():
         # create new user

@@ -63,6 +63,7 @@ export default {
     return {
       searchTitle: "",
       searchArtist: "",
+      searchGeneral: "",
       lyrics: "",
       message: "",
       message2: "",
