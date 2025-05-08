@@ -39,7 +39,7 @@ export function playRound(song, title, artist) {
     let guess = document.getElementById('guessInput');
     guess.onkeyup = function() {
         guess = document.getElementById('guessInput');
-        game.word = guess.value.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, ''); // used https://www.geeksforgeeks.org/how-to-remove-punctuation-from-text-using-javascript/;
+        game.word = guess.value.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, '').toLowerCase(); // used https://www.geeksforgeeks.org/how-to-remove-punctuation-from-text-using-javascript/;
         if (game.song.includes(game.word)) {
             if (!userGuesses.includes(game.word)) {
                 game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
@@ -112,6 +112,9 @@ export function playRound(song, title, artist) {
 
         homeButton.addEventListener('click', ()=> {
             router.push('/');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         });
     });
 }
