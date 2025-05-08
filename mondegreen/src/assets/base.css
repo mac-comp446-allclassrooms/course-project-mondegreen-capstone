@@ -196,8 +196,12 @@ button:not(.genre):active {
   margin-top: 60px;
 }
 
+.songHome {
+  box-shadow: 5px 5px 3px #9885c7;
+}
+
 .songHome, ul {
-  background-color: white;
+  background-color: #EFE8FF;
   border-radius: 8px;
   padding: 1%;
 }

@@ -232,7 +232,7 @@ export default {
   }
 
   p{
-    color: #714EBB;
+    color: black;
     font-family: titleFont;
   }
 
