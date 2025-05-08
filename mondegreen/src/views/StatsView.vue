@@ -6,8 +6,8 @@
 
       <div class="songcontainer">
         <div class="song" v-for="item in scores" :key="item.title">
-          <img :src="item.cover" :alt="item.title">
-           <ul>
+          <img :src="item.img_path" :alt="item.title">
+           <ul id="stats-songlist">
             <li>{{ item.title }}</li>
             <li>{{ item.artist }}</li>
             <li>{{ item.score }}</li>
@@ -31,7 +31,7 @@
         const id = this.$store.state.userid;
         if(id >= 0) {
           const payload = {
-            userid: id
+            userid: 1
           }
           const path = 'http://localhost:5001/songs';
           axios.post(path, payload)
@@ -76,9 +76,7 @@
     width: 3.5in;
     margin: 4px;
   }
-
-  li:first-child {
-    color:lightgray;
-    font-weight: bold;
+  #stats-songlist {
+    background-color: #D0F5E8;
   }
 </style>

@@ -325,7 +325,11 @@ def songs():
             'status': 'failure',
             'message': 'user not found'
         })
-    songs = u.songs
+    user_songs = u.songs
+    songs = []
+    for song in user_songs:
+        songs.append(song.toJSON())
+    
     return jsonify({
         'status': 'success',
         'songs': songs

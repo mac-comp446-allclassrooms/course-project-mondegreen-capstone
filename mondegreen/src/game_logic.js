@@ -8,20 +8,19 @@ import router from './router/index.js';
 import axios from 'axios';
 
 class CurrentGame {
-    constructor(song, currScore, word, currGuessedWordsTotal, title, artist, id) {
+    constructor(song, currScore, word, currGuessedWordsTotal, title, artist) {
         this.song = song;
         this.currScore = currScore;
         this.word = word;
         this.currGuessedWordsTotal = currGuessedWordsTotal;
         this.title = title;
         this.artist = artist;
-        this.userid = id;
     }
 }
 
-export function playRound(song, title, artist, id) {
+export function playRound(song, title, artist) {
     console.log("playRound called");
-    let game = new CurrentGame(song, 0, "", 0, title, artist, id);
+    let game = new CurrentGame(song, 0, "", 0, title, artist);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";
     let scoreDiv = document.getElementById('currScore');
@@ -107,7 +106,7 @@ export function playRound(song, title, artist, id) {
         scoreP.textContent = game.currScore;
         const homeButton = document.getElementById('homeButtonQ');
 
-        pushScore(title, artist, game.currScore, userid);
+        pushScore(title, artist, game.currScore);
 
         homeButton.addEventListener('click', ()=> {
             router.push('/');
@@ -197,7 +196,7 @@ function checkWin(game, title, artist) {
         const scoreP = document.getElementById('score_p');
         scoreP.textContent = game.currScore;
 
-        pushScore(title, artist, game.currScore, userid);
+        pushScore(title, artist, game.currScore);
 
         const homeButton = document.getElementById('homeButton');
         homeButton.addEventListener('click', ()=> {
@@ -212,28 +211,6 @@ function unwrap(val) {
     } else {
         return val;
     }
-}
-
-function pushScore(title, artist, score, id) {
-    if(id < 0) {
-        return false;
-    }
-    const payload = {
-        userid: id,
-        title: unwrap(title),
-        artist: unwrap(artist),
-        score: unwrap(score),
-    };
-
-    const path = 'http://localhost:5001/addsong';
-        axios.post(path, payload)
-        .then((response) => {
-          return response.data.status === 'success';
-        })
-        .catch((error) => {
-          console.log(error);
-          return false;
-        });
 }
 
 // from https://stackoverflow.com/questions/20798477/how-to-find-the-indexes-of-all-occurrences-of-an-element-in-array
