@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <router-link to="/" aria-label="<-">
+  <div id="loginPage">
+    <router-link to="/" aria-label="<-" id="backButton">
       <button><-</button>
     </router-link>
     <h1>{{ loggedIn ? "Log Out" : (isLogin ? "Log In" : "Create Account") }}</h1>

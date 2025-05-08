@@ -68,7 +68,7 @@
   grid-row-start: 4;
 }
 
-h1 {
+#gameTitle {
   color: #714EBB;
   font-family: titleFont;
   position: fixed;
@@ -204,4 +204,8 @@ button:not(.genre):active {
   background-color: #EFE8FF;
   border-radius: 8px;
   padding: 1%;
+}
+
+#loginPage {
+  margin-top: 6%;
 }

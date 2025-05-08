@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div id="app">
     <div id="wrapper">
-      <h1><em>Those</em> are the lyrics?</h1>
+      <h1 id="gameTitle"><em>Those</em> are the lyrics?</h1>
 
       <!-- <nav>
         <RouterLink to="/">Home</RouterLink>
