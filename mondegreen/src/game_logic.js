@@ -4,7 +4,6 @@
 
 import word_freq_dict from './word_freqs.js'
 
-import test_song from './test_song.js'
 import router from './router/index.js';
 import axios from 'axios';
 import store from './store.js';
@@ -39,45 +38,24 @@ export function playRound(song, title, artist) {
     }
     let guess = document.getElementById('guessInput');
     guess.onkeyup = function() {
-        // setTimeout(function() {
-            guess = document.getElementById('guessInput');
-            game.word = guess.value.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, ''); // used https://www.geeksforgeeks.org/how-to-remove-punctuation-from-text-using-javascript/;
-            if (game.song.includes(game.word)) {
-                if (!userGuesses.includes(game.word)) {
-                    game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
-                    userGuesses.push(game.word);
-                    setTimeout(function() {
-                        guess.value = "";
-                    }, 200);
-                } else {
-                    guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-                        if (event.key === "Enter" && game.song.includes(game.word)) {
-                            const temp_word = game.word;
-                            event.preventDefault();
-                            let already_guessed = document.getElementById("already_guessed");
-                            already_guessed.style.visibility = "visible";
-                            setTimeout(function() {
-                                already_guessed.style.visibility = "hidden";
-                                if (guess.value === temp_word) {
-                                    guess.value = "";
-                                }
-                            }, 2000);
-                        }
-                    });
-                }
-                scoreDiv.textContent = "Current Score: " + game.currScore;
-                // guess.value = "";
-                totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
-                checkWin(game, title, artist)
+        guess = document.getElementById('guessInput');
+        game.word = guess.value.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, ''); // used https://www.geeksforgeeks.org/how-to-remove-punctuation-from-text-using-javascript/;
+        if (game.song.includes(game.word)) {
+            if (!userGuesses.includes(game.word)) {
+                game.currScore += checkGuessedWord(game.song, game.word, lyricDivs, game);
+                userGuesses.push(game.word);
+                setTimeout(function() {
+                    guess.value = "";
+                }, 200);
             } else {
                 guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-                    if (event.key === "Enter" && !game.song.includes(game.word)) {
+                    if (event.key === "Enter" && game.song.includes(game.word)) {
                         const temp_word = game.word;
                         event.preventDefault();
-                        let not_lyrics = document.getElementById("not_lyrics");
-                        not_lyrics.style.visibility = "visible";
+                        let already_guessed = document.getElementById("already_guessed");
+                        already_guessed.style.visibility = "visible";
                         setTimeout(function() {
-                            not_lyrics.style.visibility = "hidden";
+                            already_guessed.style.visibility = "hidden";
                             if (guess.value === temp_word) {
                                 guess.value = "";
                             }
@@ -85,7 +63,26 @@ export function playRound(song, title, artist) {
                     }
                 });
             }
-        // }, 500);
+            scoreDiv.textContent = "Current Score: " + game.currScore;
+            // guess.value = "";
+            totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
+            checkWin(game, title, artist)
+        } else {
+            guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+                if (event.key === "Enter" && !game.song.includes(game.word)) {
+                    const temp_word = game.word;
+                    event.preventDefault();
+                    let not_lyrics = document.getElementById("not_lyrics");
+                    not_lyrics.style.visibility = "visible";
+                    setTimeout(function() {
+                        not_lyrics.style.visibility = "hidden";
+                        if (guess.value === temp_word) {
+                            guess.value = "";
+                        }
+                    }, 2000);
+                }
+            });
+        }
     }
     document.getElementById("hintButton").disabled = false;
     document.getElementById("quitButton").disabled = false;
@@ -175,7 +172,7 @@ function calculateScore(songRatio, engOccurances) {
         score += 5;
     } else if (engOccurances < 999999) {
         score += 4;
-    } else if (engOccurances < 2605617) {//top 15000 words
+    } else if (engOccurances < 2605617) { //top 15000 words
         score += 3;
     } else if (engOccurances < 17864371) { //top 4000 words
         score += 2;
@@ -201,11 +198,6 @@ function checkWin(game, title, artist) {
         homeButton.addEventListener('click', ()=> {
             router.push('/');
         });
-        // const replayButton = document.getElementById('replayButton');
-        // replayButton.addEventListener('click', ()=> {
-        //     router.push('/game');
-        //     winDiv.style.display = "none";
-        // });
     }
 }
 
