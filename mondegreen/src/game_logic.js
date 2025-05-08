@@ -106,8 +106,6 @@ export function playRound(song, title, artist) {
         scoreP.textContent = game.currScore;
         const homeButton = document.getElementById('homeButtonQ');
 
-        pushScore(title, artist, game.currScore);
-
         homeButton.addEventListener('click', ()=> {
             router.push('/');
             setTimeout(() => {
@@ -196,11 +194,12 @@ function checkWin(game, title, artist) {
         const scoreP = document.getElementById('score_p');
         scoreP.textContent = game.currScore;
 
-        pushScore(title, artist, game.currScore);
-
         const homeButton = document.getElementById('homeButton');
         homeButton.addEventListener('click', ()=> {
             router.push('/');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         });
     }
 }
