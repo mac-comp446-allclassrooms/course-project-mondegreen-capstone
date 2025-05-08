@@ -41,7 +41,7 @@
 
     <div class="songcontainerHome">
       <div class = "songHome" v-for="item in recommendation" :key="item.title">
-          <img style="width: 10%; background-color: aliceblue;" src="../assets/image.png" :alt="item.title">
+          <!-- <img style="width: 10%; background-color: aliceblue;" src="../assets/image.png" :alt="item.title"> -->
           <ul>
             <p>{{ item.title }}</p>
             <p>{{ item.artist }}</p>

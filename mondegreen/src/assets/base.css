@@ -195,3 +195,9 @@ button:not(.genre):active {
 #search {
   margin-top: 60px;
 }
+
+.songHome, ul {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1%;
+}
