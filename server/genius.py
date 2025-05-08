@@ -5,6 +5,7 @@
 import re
 import string
 import lyricsgenius
+import unicodedata
 
 genius = lyricsgenius.Genius("79bSVlRX4YEmwomC2oIp_jiWPiGliEtArd2dsIlisD4NfHPPVuRdp-skYhQKmfgn", remove_section_headers=False)
 # artist = genius.search_artist("Taylor Swift", max_songs=1)
@@ -17,10 +18,17 @@ def coverArt(title, artist):
     return song.song_art_image_thumbnail_url
 
 def clean_lyrics(lyrics):
-    song_start = re.search(r'\[.*?\]', lyrics)
-    if song_start:
-        lyrics = lyrics[song_start.start():]
-
+    lyrics = unicodedata.normalize("NFKD", lyrics)
+    song_start_brackets = re.search(r'\[.*?\]', lyrics)
+    if song_start_brackets:
+        lyrics = lyrics[song_start_brackets.start():]
+    else:
+        song_start_else = list(re.finditer(r'\.[^\s\'"]', lyrics))
+        if len(song_start_else) >= 2:
+            lyrics = lyrics[song_start_else[len(song_start_else)-1].start():]
+        elif song_start_else:
+            lyrics = lyrics[song_start_else[0].start():]
+    
     lyrics = re.sub(r'\[.*?\]', ' ', lyrics)
     lyrics = lyrics.replace('\n', ' ')
     lyrics = lyrics.replace("'", '')
@@ -37,7 +45,9 @@ def clean_lyrics(lyrics):
 def getLyrics(title, artist):
     song = genius.search_song(title, artist)
     if song:
+        print(song.lyrics)
         return clean_lyrics(song.lyrics)
+        # return song.lyrics
     return "Lyrics not found"
 
 def searchMulti(term):
