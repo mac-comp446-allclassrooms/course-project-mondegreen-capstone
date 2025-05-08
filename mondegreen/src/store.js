@@ -1,3 +1,7 @@
+/*
+ * File for code to store lyrics, title, and artist of the songs that a user (userid) plays.
+ */
+
 import { createStore } from 'vuex';
 
 const store = createStore({

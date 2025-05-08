@@ -1,3 +1,5 @@
+<!-- File to reveal how to play -->
+
 <template>
   <div class="about">
     <h1>Welcome! Before you start, it might be helpful to be briefly introduced [smiley face]</h1>

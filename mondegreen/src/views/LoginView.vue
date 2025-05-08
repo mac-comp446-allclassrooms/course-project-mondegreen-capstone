@@ -1,3 +1,5 @@
+<!-- File for the user to login or sign-up -->
+
 <template>
   <div id="loginPage">
     <router-link to="/" aria-label="back" id="backButton">

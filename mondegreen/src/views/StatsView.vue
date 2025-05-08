@@ -1,3 +1,5 @@
+<!-- File for the user's game statistics -->
+
 <template>
     <div class="user">
       <h1>Game stats:</h1>

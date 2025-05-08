@@ -1,3 +1,5 @@
+<!-- File that contains the game page -->
+
 <template>
   <div class="game">
     <div class="game_base">
@@ -48,7 +50,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-// import func from '../../../vue-temp/vue-editor-bridge.js';
 import { playRound } from '../game_logic.js';
 import store from '../store';
 

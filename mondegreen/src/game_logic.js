@@ -64,7 +64,6 @@ export function playRound(song, title, artist, id) {
                 });
             }
             scoreDiv.textContent = "Current Score: " + game.currScore;
-            // guess.value = "";
             totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
             checkWin(game, title, artist)
         } else {
