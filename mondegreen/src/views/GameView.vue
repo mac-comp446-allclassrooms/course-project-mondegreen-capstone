@@ -15,6 +15,10 @@
       </form>
       <button type="button" id="hintButton" class="item9">Hint</button>
       <button type="button" id="quitButton" class="item10">Give up</button>
+
+      <router-link to="/" aria-label="<-" id="backButton">
+        <button><-</button>
+      </router-link>
       
     </div>
     <div id="lyrics" class="item11">

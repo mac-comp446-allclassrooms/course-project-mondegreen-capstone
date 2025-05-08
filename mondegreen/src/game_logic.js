@@ -110,6 +110,9 @@ export function playRound(song, title, artist) {
         const scoreP = document.getElementById('score_pQ');
         scoreP.textContent = game.currScore;
         const homeButton = document.getElementById('homeButtonQ');
+
+        pushScore(title, artist, game.currScore);
+
         homeButton.addEventListener('click', ()=> {
             router.push('/');
         });
