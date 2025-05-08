@@ -19,18 +19,22 @@
         <br>
       </div>
       <button type="submit">{{ loggedIn ? "Log Out" : (isLogin ? "Log In" : "Create Account") }}</button>
-      <button @click="toggleButton">{{ isLogin ? "Go to Sign up" : "Go to Log In" }}</button>
+      <button @click="toggleButton" v-if="!loggedIn">{{ isLogin ? "Go to Sign up" : "Go to Log In" }}</button>
     </form>
   </div>
   <span>{{ message }}</span>
+
+  <StatsView v-if="loggedIn"/>
 </template>
 
 <script>
   import axios from 'axios';
   import store from '../store';
+  import StatsView from './StatsView.vue';
   
 
   export default {
+    components: { StatsView },
     data () {
       return {
         message: '',
@@ -56,10 +60,10 @@
       signup(payload) {
         const path = 'http://localhost:5001/signup';
         axios.post(path, payload)
-        .then(function (response) {
+        .then((response) => {
           this.loginResponse(response);
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
       },
@@ -94,12 +98,10 @@
         }
       },
       loginResponse(response) {
-        console.log(response.data, " from loginResponse");
         if (response.data.status === 'success') {
           this.message = 'logged in';
           this.loggedIn = true;
           const id = response.data.id;
-          console.log("from loginResponse ", id);
           store.commit('setId', id);
           
         } else if (response.data.status === 'failure') {
@@ -119,19 +121,25 @@
       logout() {
         const path = 'http://localhost:5001/logout';
         axios.post(path)
-        .then(function (response) {
+        .then((response) => {
           this.message = 'Successfully logged out!';
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
         this.loggedIn = false;
+        store.commit('setId', -1);
       },
       toggleButton() {
         this.isLogin = !this.isLogin;
       },
+      checkLogin() {
+        const id = this.$store.state.userid;
+        this.loggedIn = id >= 0;
+      }
     },
     created() {
+      this.checkLogin();
     },
   };
 </script>

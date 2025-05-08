@@ -6,19 +6,23 @@ import word_freq_dict from './word_freqs.js'
 
 import test_song from './test_song.js'
 import router from './router/index.js';
+import axios from 'axios';
+import store from './store.js';
 
 class CurrentGame {
-    constructor(song, currScore, word, currGuessedWordsTotal) {
+    constructor(song, currScore, word, currGuessedWordsTotal, title, artist) {
         this.song = song;
         this.currScore = currScore;
         this.word = word;
         this.currGuessedWordsTotal = currGuessedWordsTotal;
+        this.title = title;
+        this.artist = artist;
     }
 }
 
-export function playRound(song) {
+export function playRound(song, title, artist) {
     console.log("playRound called");
-    let game = new CurrentGame(song, 0, "", 0);
+    let game = new CurrentGame(song, 0, "", 0, title, artist);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";
     let scoreDiv = document.getElementById('currScore');
@@ -183,6 +187,9 @@ function checkWin(game) {
         winDiv.style.display = "block";
         const scoreP = document.getElementById('score_p');
         scoreP.textContent = game.currScore;
+
+        pushScore(title, artist, game.currScore);
+
         const homeButton = document.getElementById('homeButton');
         homeButton.addEventListener('click', ()=> {
             router.push('/');
@@ -193,6 +200,29 @@ function checkWin(game) {
         //     winDiv.style.display = "none";
         // });
     }
+}
+
+function pushScore(title, artist, score) {
+    const id = store.getters.getId;
+    if(id < 0) {
+        return false;
+    }
+    const payload = {
+        id: id,
+        title: title,
+        artist: artist,
+        score: score
+    };
+
+    const path = 'http://localhost:5001/addsong';
+        axios.post(path, payload)
+        .then((response) => {
+          return response.data.status === 'success';
+        })
+        .catch((error) => {
+          console.log(error);
+          return false;
+        });
 }
 
 // from https://stackoverflow.com/questions/20798477/how-to-find-the-indexes-of-all-occurrences-of-an-element-in-array

@@ -70,7 +70,7 @@ onMounted(() => {
   if (lyrics.value === "Lyrics not found") {
     alert("Lyrics not found")
   } else {
-    playRound(lyrics_array);
+    playRound(lyrics_array, title, artist);
     document.getElementbyId("array");
     let arrayDiv = document.createElement('div');
     arrayDiv.textContent = lyrics_array;

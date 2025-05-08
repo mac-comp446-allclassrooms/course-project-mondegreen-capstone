@@ -1,6 +1,6 @@
 <template>
     <div class="user">
-      <h1>This is where user stats will go</h1>
+      <h1>Game stats:</h1>
 
       <div class="songcontainer">
         <div class="song" v-for="item in scores" :key="item.title">
@@ -26,14 +26,24 @@
     },
     methods: {
       getSongs() {
-        const path = 'http://localhost:5001/songs';
-        axios.get(path)
-        .then((res) => {
-          this.scores = res.data.songs;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        const id = this.$store.state.userid;
+        if(id >= 0) {
+          const payload = {
+            id: id
+          }
+          const path = 'http://localhost:5001/songs';
+          axios.post(path, payload)
+          .then((res) => {
+            if(res.data.status === 'failure') {
+              console.log(res.data.message);
+            } else {
+              this.scores = res.data.songs;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }
       },
     },
     created() {

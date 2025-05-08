@@ -1,6 +1,5 @@
 <template>
   <main>
-    <button @click="printStuff">Click to do something neato</button>
     <router-link to="/login" aria-label="Log In" id="userLink">
       <button>Log In</button>
     </router-link>
@@ -61,7 +60,6 @@
 <script>
 import axios from 'axios';
 import store from '../store';
-import {computed} from 'vue';
 
 export default {
   name: "HomeView",
@@ -186,10 +184,6 @@ export default {
             this.message3 = `Error searching for "${genre}"...`;
             console.error("Error fetching lyrics:", error);
           });
-    },
-    printStuff() {
-      const id = this.$store.state.userid;
-      console.log("data is ", id);
     },
     created() {
       this.submitSearch();

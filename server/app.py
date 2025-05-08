@@ -196,13 +196,6 @@ def index():
 def ping_pong():
     return jsonify('pong!')
 
-@app.route('/songs', methods = ['GET', 'POST'])
-def songs():
-    return jsonify({
-        'status': 'success',
-        'songs': SONGS
-    })
-
 @app.route('/admin')
 def admin():
     all_users = db.session.query(User).all()
@@ -249,13 +242,11 @@ def home():
     if user_data and verify_password(pwhash=user_data.password_hash, password=password):
         # success, add to session
         userid =  user_data.id
-        print('user ' + user_data.username + ' logged in')
         return jsonify({
             'status': 'success',
             'id': userid # TODO: BAD BAD SECURITY
         })
     # wrong password, failure
-    print('wrong password for login attempt ' + username)
     return jsonify({
             'status': 'failure',
             'message': 'wrong password'
@@ -290,7 +281,7 @@ def logout():
         'status': 'success'
     })
 
-@app.route('/song/<id>', methods = ['GET', 'POST'])
+@app.route('/addsong', methods = ['GET', 'POST'])
 def addSong():
     if request.method == 'POST':
         data = request.get_json()
@@ -319,6 +310,26 @@ def addSong():
                 'status': 'success',
                 'message': 'new song'
             })
+        
+@app.route('/songs', methods = ['POST'])
+def songs():
+    id = request.json['id']
+    if not id:
+        return jsonify({
+            'status': 'failure',
+            'message': 'missing id'
+        })
+    u = db.session.get(User, id)
+    if not u:
+        return jsonify({
+            'status': 'failure',
+            'message': 'user not found'
+        })
+    songs = u.songs
+    return jsonify({
+        'status': 'success',
+        'songs': songs
+    })
 
 #
 # RUN
