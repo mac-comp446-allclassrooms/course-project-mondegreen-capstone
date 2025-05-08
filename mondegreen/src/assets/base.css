@@ -16,7 +16,7 @@
 
 .game_base {
   display: grid;
-  grid-template-columns: auto auto 60px 60px;
+  grid-template-columns: 2fr 10fr 1fr 1fr;
   grid-template-rows: auto auto auto auto auto auto min-content;
   justify-content: start;
   position: fixed;
@@ -47,6 +47,7 @@
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: auto auto;
+  justify-content: start;
 }
 
 .item6 {
