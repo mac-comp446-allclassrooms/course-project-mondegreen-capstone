@@ -14,11 +14,13 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/login">Login</RouterLink>
         <RouterLink to="/register">Sign up</RouterLink>
       </nav> -->
+
+      <router-view :key="$route.fullPath"/>
     </div>
 <div>
-  <router-view v-slot="{ Component }">
+  <!-- <router-view v-slot="{ Component }">
     <component :is="Component" />
-  </router-view>
+  </router-view> -->
 </div>
     
 

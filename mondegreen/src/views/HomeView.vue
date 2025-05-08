@@ -3,7 +3,7 @@
     <router-link to="/login" aria-label="Log In" id="userLink">
       <button>Log In</button>
     </router-link>
-    <h2>Search for a song:</h2>
+    <h2 id="search">Search for a song:</h2>
     <!-- <div>
       <input type="text" v-model="searchTitle" placeholder="Enter song" />
       <input v-on:keyup.enter="submitSearch" type="text" v-model="searchArtist" placeholder="Enter artist" />

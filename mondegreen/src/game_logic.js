@@ -68,7 +68,7 @@ export function playRound(song, title, artist) {
                 scoreDiv.textContent = "Current Score: " + game.currScore;
                 // guess.value = "";
                 totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
-                checkWin(game)
+                checkWin(game, title, artist)
             } else {
                 guess.addEventListener('keypress', function(event) { // used https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
                     if (event.key === "Enter" && !game.song.includes(game.word)) {
@@ -96,7 +96,7 @@ export function playRound(song, title, artist) {
             randLyric = game.song[randI];
         }
         userGuesses.push(randLyric);
-        checkHintWord(song, randLyric, lyricDivs, game);
+        checkHintWord(song, randLyric, lyricDivs, game, title, artist);
         totalWords.textContent = "Guessed Lyrics: " + game.currGuessedWordsTotal + "/" + song.length
     });
     const quit_button = document.getElementById("quitButton");
@@ -126,7 +126,7 @@ function checkGuessedWord(song, word, lyricDivs, game) {
     }
 }
 
-function checkHintWord(song, word, lyricDivs, game) {
+function checkHintWord(song, word, lyricDivs, game, title, artist) {
     const currIndexes = getAllIndexes(song, word);
     for (let i = 0; i < currIndexes.length; i++) {
         const index = currIndexes[i];
@@ -135,6 +135,7 @@ function checkHintWord(song, word, lyricDivs, game) {
         lyricDivs[index].style.color = '#0E60AD';
     }
     game.currGuessedWordsTotal += currIndexes.length;
+    checkWin(game, title, artist);
 }
 
 function getScore(song, word, game) {
@@ -181,7 +182,7 @@ function calculateScore(songRatio, engOccurances) {
     return score;
 }
 
-function checkWin(game) {
+function checkWin(game, title, artist) {
     if (game.currGuessedWordsTotal === game.song.length) {
         const winDiv = document.getElementById('win_game');
         winDiv.style.display = "block";
@@ -202,6 +203,14 @@ function checkWin(game) {
     }
 }
 
+function unwrap(val) {
+    if (val.value !== null) {
+        return val.value;
+    } else {
+        return val;
+    }
+}
+
 function pushScore(title, artist, score) {
     const id = store.getters.getId;
     if(id < 0) {
@@ -209,9 +218,9 @@ function pushScore(title, artist, score) {
     }
     const payload = {
         id: id,
-        title: title,
-        artist: artist,
-        score: score
+        title: unwrap(title),
+        artist: unwrap(artist),
+        score: unwrap(score),
     };
 
     const path = 'http://localhost:5001/addsong';
