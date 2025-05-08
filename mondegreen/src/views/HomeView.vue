@@ -51,17 +51,20 @@
       </div>
     </div>
     <p>Just starting?</p>
-    <router-link to="/howto" aria-label="How to play">
-      <button>How to play</button>
-    </router-link>
+
+    <button @click="toggleHowTo">How to play</button>
+
+    <HowToView v-if="howTo"/>
   </main>
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
+import HowToView from './HowToView.vue';
 
 export default {
+  components: { HowToView },
   name: "HomeView",
   data() {
     return {
@@ -84,9 +87,13 @@ export default {
       recommendation: [],
       message5: "",
       showRecs: true,
+      howTo: false,
     };
   },
   methods: {
+    toggleHowTo() {
+      this.howTo = !this.howTo;
+    },
     submitSearch() {
        // song name and artist
       const title = this.searchTitle.trim();
