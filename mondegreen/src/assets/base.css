@@ -16,9 +16,13 @@
 
 .game_base {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto 60px 60px;
   grid-template-rows: auto auto auto auto auto auto min-content;
   justify-content: start;
+  position: fixed;
+  top: 40px;
+  width: 100vw;
+  padding-bottom: 10px;
 }
 
 .item1 {
@@ -71,6 +75,10 @@
 h1 {
   color: #714EBB;
   font-family: titleFont;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  margin: 0;
 }
 
 p, div {
@@ -126,7 +134,7 @@ button:not(.genre):active {
   background-color: #86D1B6;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  margin-top: 10px;
+  margin-top: 12rem;
   padding: 0.3rem;
   border-radius: 8px;
   margin-right: 3rem;
@@ -173,3 +181,8 @@ button:not(.genre):active {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+/* #hintButton, #quitButton {
+  padding-left: 20px;
+  padding-right: 20%;
+} */
