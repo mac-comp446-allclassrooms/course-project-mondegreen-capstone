@@ -15,7 +15,9 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/register">Sign up</RouterLink>
       </nav> -->
 
-      <router-view :key="$route.fullPath"/>
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
     </div>
 <div>
   <!-- <router-view v-slot="{ Component }">
