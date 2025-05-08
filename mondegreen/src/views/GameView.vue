@@ -23,20 +23,20 @@
     <div class="popup">
       <div id="win_game" style="display:none;">
         <h2>Congrats! You did it!</h2>
-        <p>Your Score:</p>
+        <p class="scoreLabel">Your Score:</p>
         <p id="score_p"></p>
         <div>
           <button type="button" id="homeButton">Try Another Song</button>
-          <button type="button" id="shareButton" @click="copyToClipboardWin">Share Results</button>
+          <button type="button" id="shareButton" @click="copyToClipboardWin(title,artist)">Share Results</button>
         </div>
       </div>
       <div id="quit_game" style="display:none;">
         <h2>;-; Try again next time!</h2>
-        <p>Your Score:</p>
+        <p class="scoreLabel">Your Score:</p>
         <p id="score_pQ"></p>
         <div>
           <button type="button" id="homeButtonQ">Try Another Song</button>
-          <button type="button" id="shareButtonQ" @click="copyToClipboardQuit">Share Results</button>
+          <button type="button" id="shareButtonQ" @click="copyToClipboardQuit(title,artist)">Share Results</button>
         </div>
       </div>
     </div>
@@ -77,18 +77,18 @@ onMounted(() => {
     document.appendChild(arrayDiv);
   }
 });
-function copyToClipboardQuit() {
+function copyToClipboardQuit(title, artist) {
   const textToCopy = document.querySelector("#score_pQ");
   if (textToCopy) {
-    navigator.clipboard.writeText("Try again next time ;-; \n Your score: " + textToCopy.textContent || "").then(() => {
+    navigator.clipboard.writeText("Those are the Lyrics? " + title + " by " + artist + "\n Try again next time ;-; \n Your score: " + textToCopy.textContent || "").then(() => {
       alert("Results copied to clipboard!");
     });
   }
 }
-function copyToClipboardWin() {
+function copyToClipboardWin(title, artist) {
   const textToCopy = document.querySelector("#score_p");
   if (textToCopy) {
-    navigator.clipboard.writeText("Congrats! You did it! \n Your score: " + textToCopy.textContent || "").then(() => {
+    navigator.clipboard.writeText("Those are the Lyrics? " + title + " by " + artist + "\n Congrats! You did it! \n Your score: " + textToCopy.textContent || "").then(() => {
       alert("Results copied to clipboard!");
     });
   }

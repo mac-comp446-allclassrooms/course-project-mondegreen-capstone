@@ -87,6 +87,8 @@ export function playRound(song, title, artist) {
             }
         // }, 500);
     }
+    document.getElementById("hintButton").disabled = false;
+    document.getElementById("quitButton").disabled = false;
     const hint_button = document.getElementById("hintButton");
     hint_button.addEventListener('click', ()=> {
         let randI = Math.floor(Math.random() * game.song.length); // used https://www.geeksforgeeks.org/how-to-select-a-random-element-from-array-in-javascript/
@@ -101,6 +103,8 @@ export function playRound(song, title, artist) {
     });
     const quit_button = document.getElementById("quitButton");
     quit_button.addEventListener('click', ()=> {
+        document.getElementById("hintButton").disabled = true;
+        document.getElementById("quitButton").disabled = true;
         const quitDiv = document.getElementById('quit_game');
         quitDiv.style.display = "block";
         const scoreP = document.getElementById('score_pQ');
@@ -184,6 +188,8 @@ function calculateScore(songRatio, engOccurances) {
 
 function checkWin(game, title, artist) {
     if (game.currGuessedWordsTotal === game.song.length) {
+        document.getElementById("hintButton").disabled = true;
+        document.getElementById("quitButton").disabled = true;
         const winDiv = document.getElementById('win_game');
         winDiv.style.display = "block";
         const scoreP = document.getElementById('score_p');

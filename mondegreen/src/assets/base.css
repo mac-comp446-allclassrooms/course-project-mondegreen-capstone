@@ -9,11 +9,6 @@
   margin: 0.1rem;
 }
 
-/* .flex-container {
-  display: flex;
-  flex-direction: row;
-} */
-
 .game_base {
   display: grid;
   grid-template-columns: 2fr 10fr 1fr 1fr;
@@ -83,8 +78,13 @@ h1 {
   min-height: 50px;
 }
 
+h2 {
+  background-color: inherit;
+}
+
 p, div {
   font-family: Verdana;
+  background-color: inherit;
 }
 
 input {
@@ -142,24 +142,33 @@ button:not(.genre):active {
   margin-right: 3rem;
 }
 
-#win_game, #quit_game {
-  position: sticky;
+#win_game, #quit_game{
+  position: absolute;
   top: 0;
-  width: 70%;
+  width: 60%;
   height: 30%;
-  background: hsla(160, 100%, 37%, 1);
+  background: #EFE8FF;
   color: black;
-  margin: auto;
-  padding: 5%;
+  margin-top: 15rem;
+  margin-left: 5rem;
+  padding-top: 5%;
   text-align: center;
-  
+  border-radius: 8px;
+  border: #EFE8FF;
+  box-shadow: 5px 5px 3px #9885c7;
 }
 
-#score_p {
+#score_p, #score_pQ {
   background: white;
   color: black;
-  font-size: x-large;
+  font-size: 60px;
   text-align: center;
+  width: 10%;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+  margin: auto;
+  border-radius: 8px;
 }
 
 .genre {
@@ -180,19 +189,8 @@ button:not(.genre):active {
 }
 
 .genreButtons {
-  /* margin-left: 1rem;
-  margin-right: 1rem; */
-    /* margin-left: 1rem;
-  margin-right: 3rem;
-  width: 90vw;
-  padding-right: 30px; */
   width: 90vw;
 }
-
-/* #hintButton, #quitButton {
-  padding-left: 20px;
-  padding-right: 20%;
-} */
 
 #search {
   margin-top: 60px;
