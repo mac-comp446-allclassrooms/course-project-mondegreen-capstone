@@ -1,21 +1,39 @@
 # Those are the Lyrics?
 
-Info about your project goes here
+"Those are the Lyrics?" is a song lyric game made by Michelle Dong, Redding Sauter, and Kendall Sullivan in Joslenne Peña's Internet Computing capstone course at Macalester College. The purpose of the game is to search for a song and then try to guess the lyrics to that song the best you can. There is an optional login that is intended to save the statistics from the user (what songs they tried, what their scores were) however it is not fully implemented at this time so the game stats is hardcoded. However, the main game is still functional.
 
-1.Keep in mind the structure of this directory and organize your project files properly. Feel free to add more folders as needed for your app.
+## Tech Stack
 
-2.Delete the empty markdown (.md) files in each of these folders, they are only there as placeholder!
+Our project is hosted on Vue.js.
+The backend uses Flask and SqlAlchemy.
+We use axios to make asynchronous calls to our Flask API.
+The lyrics for each song are retrieved using the Genius API.
+We use Vuex to store the lyrics, title, and artist to be used in the game.
+Our project is styled using vanilla CSS, CSS grid layout, and CSS flexbox layout.
 
-3.Then change this README at the end of the project based on the guidelines.
+## Installation Instructions
 
-## Documentation
+For our project, you need to have Python and Node.js installed on your device.
 
-Info about your project goes here
+In order to run our application, you must run the following:
+```bash
+npm install
+```
+```bash
+pip install flask flask_cors flask_sqlalchemy sqlalchemy.orm werkzeug.security lyricsgenius
+```
 
-## More information
+## Running the Project
 
-Info about your project goes here
-
-* some parts are coded with the help of github copilot!
-
+To run our project, in one terminal window run the backend:
+```bash
+cd server
+flask run --port=5001 --debug
+```
+In a second terminal window run the frontend:
+```bash
+cd mondegreen
+npm run dev
+```
+After doing so, use [localhost:5173](http://localhost:5173) to play "Those are the Lyrics?"!
 
