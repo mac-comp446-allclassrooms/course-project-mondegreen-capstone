@@ -1,5 +1,9 @@
 <template>
   <main>
+    <button @click="printStuff">Click to do something neato</button>
+    <router-link to="/login" aria-label="Log In" id="userLink">
+      <button>Log In</button>
+    </router-link>
     <h2>Search for a song:</h2>
     <!-- <div>
       <input type="text" v-model="searchTitle" placeholder="Enter song" />
@@ -57,6 +61,8 @@
 <script>
 import axios from 'axios';
 import store from '../store';
+import {computed} from 'vue';
+
 export default {
   name: "HomeView",
   data() {
@@ -181,6 +187,10 @@ export default {
             console.error("Error fetching lyrics:", error);
           });
     },
+    printStuff() {
+      const id = this.$store.state.userid;
+      console.log("data is ", id);
+    },
     created() {
       this.submitSearch();
       this.generalSearch();
@@ -189,8 +199,6 @@ export default {
     }
   },
 };
-
-
 </script>
 
 <style>
@@ -234,4 +242,7 @@ export default {
     font-family: titleFont;
   }
 
+  #userLink {
+    float: right;
+  }
 </style>

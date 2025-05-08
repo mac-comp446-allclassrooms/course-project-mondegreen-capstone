@@ -5,6 +5,7 @@ const store = createStore({
     lyrics: '',
     title: '',
     artist: '',
+    userid: -1,
   },
   mutations: {
     setLyrics(state, lyrics) {
@@ -19,6 +20,9 @@ const store = createStore({
     setCover(state, cover) {
       state.cover = cover;
     },
+    setId(state, id) {
+      state.userid = id;
+    }
   },
   getters: {
     getLyrics(state) {
@@ -30,8 +34,11 @@ const store = createStore({
     getArtist(state) {
       return state.artist;
     },
-    getCover(state){
+    getCover(state) {
       return state.cover;
+    },
+    getId(state) {
+      return state.id;
     }
   },
 });

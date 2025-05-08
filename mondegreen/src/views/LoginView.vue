@@ -1,5 +1,8 @@
 <template>
   <div>
+    <router-link to="/" aria-label="<-">
+      <button><-</button>
+    </router-link>
     <h1>{{ loggedIn ? "Log Out" : (isLogin ? "Log In" : "Create Account") }}</h1>
     <form @submit.prevent="handleActions">
       <div v-if="!loggedIn">
@@ -24,6 +27,8 @@
 
 <script>
   import axios from 'axios';
+  import store from '../store';
+  
 
   export default {
     data () {
@@ -93,11 +98,10 @@
         if (response.data.status === 'success') {
           this.message = 'logged in';
           this.loggedIn = true;
-          id = response.data.id
-          this.$router.push({
-            name: "id",
-            params: {id}
-          });
+          const id = response.data.id;
+          console.log("from loginResponse ", id);
+          store.commit('setId', id);
+          
         } else if (response.data.status === 'failure') {
           this.message = response.data.message;
         } else {
