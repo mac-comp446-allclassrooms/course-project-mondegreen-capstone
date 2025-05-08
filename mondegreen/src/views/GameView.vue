@@ -57,6 +57,7 @@ let lyrics = computed(() => store.getters.getLyrics);
 const title = computed(() => store.getters.getTitle);
 const artist = computed(() => store.getters.getArtist);
 const cover = computed(() => store.getters.getCover);
+const id = computed(() => store.getters.getId);
 
 
 lyrics.value = lyrics.value.replace(/_/g, ' ');
@@ -70,7 +71,7 @@ onMounted(() => {
   if (lyrics.value === "Lyrics not found") {
     alert("Lyrics not found")
   } else {
-    playRound(lyrics_array, title, artist);
+    playRound(lyrics_array, title, artist, id);
     document.getElementbyId("array");
     let arrayDiv = document.createElement('div');
     arrayDiv.textContent = lyrics_array;

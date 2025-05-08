@@ -6,22 +6,22 @@ import word_freq_dict from './word_freqs.js'
 
 import router from './router/index.js';
 import axios from 'axios';
-import store from './store.js';
 
 class CurrentGame {
-    constructor(song, currScore, word, currGuessedWordsTotal, title, artist) {
+    constructor(song, currScore, word, currGuessedWordsTotal, title, artist, id) {
         this.song = song;
         this.currScore = currScore;
         this.word = word;
         this.currGuessedWordsTotal = currGuessedWordsTotal;
         this.title = title;
         this.artist = artist;
+        this.userid = id;
     }
 }
 
-export function playRound(song, title, artist) {
+export function playRound(song, title, artist, id) {
     console.log("playRound called");
-    let game = new CurrentGame(song, 0, "", 0, title, artist);
+    let game = new CurrentGame(song, 0, "", 0, title, artist, id);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";
     let scoreDiv = document.getElementById('currScore');
@@ -108,7 +108,7 @@ export function playRound(song, title, artist) {
         scoreP.textContent = game.currScore;
         const homeButton = document.getElementById('homeButtonQ');
 
-        pushScore(title, artist, game.currScore);
+        pushScore(title, artist, game.currScore, userid);
 
         homeButton.addEventListener('click', ()=> {
             router.push('/');
@@ -198,7 +198,7 @@ function checkWin(game, title, artist) {
         const scoreP = document.getElementById('score_p');
         scoreP.textContent = game.currScore;
 
-        pushScore(title, artist, game.currScore);
+        pushScore(title, artist, game.currScore, userid);
 
         const homeButton = document.getElementById('homeButton');
         homeButton.addEventListener('click', ()=> {
@@ -215,13 +215,12 @@ function unwrap(val) {
     }
 }
 
-function pushScore(title, artist, score) {
-    const id = store.getters.getId;
+function pushScore(title, artist, score, id) {
     if(id < 0) {
         return false;
     }
     const payload = {
-        id: id,
+        userid: id,
         title: unwrap(title),
         artist: unwrap(artist),
         score: unwrap(score),

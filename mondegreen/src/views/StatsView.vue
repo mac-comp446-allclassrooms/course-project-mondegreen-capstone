@@ -29,7 +29,7 @@
         const id = this.$store.state.userid;
         if(id >= 0) {
           const payload = {
-            id: id
+            userid: id
           }
           const path = 'http://localhost:5001/songs';
           axios.post(path, payload)

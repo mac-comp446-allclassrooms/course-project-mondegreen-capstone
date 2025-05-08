@@ -284,8 +284,8 @@ def logout():
 @app.route('/addsong', methods = ['GET', 'POST'])
 def addSong():
     if request.method == 'POST':
-        data = request.get_json()
-        userid = data['id']
+        data = request.json
+        userid = data['userid']
         title = data['title']
         artist = data['artist']
         score = data['score']
@@ -313,7 +313,7 @@ def addSong():
         
 @app.route('/songs', methods = ['POST'])
 def songs():
-    id = request.json['id']
+    id = request.json['userid']
     if not id:
         return jsonify({
             'status': 'failure',
