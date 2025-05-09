@@ -4,7 +4,7 @@
       <button>Log In</button>
     </router-link>
     <h2 id="search">Search for a song:</h2>
-    {{ message2 }}
+    <p>{{ message2 }}</p>
     <div >
       <input v-on:keyup.enter="generalSearch" type="text" v-model="searchGeneral" placeholder="Enter Song" />
       <button @click="generalSearch">Search</button>
@@ -15,7 +15,7 @@
               <p>{{ item.title }}</p>
               <p>{{ item.artist }}</p>
               <button @click="playSong(item,item.title,item.artist,false)">Play Song</button>
-              {{ message5 }}
+              <p>{{ message5 }}</p>
             </ul>
             
         </div>
@@ -23,7 +23,7 @@
     </div>
     <div id="recs" v-if="showRecs">
       <h3>Want to be recommended some songs? Select a genre:</h3> 
-      {{ message3 }}
+      <p>{{ message3 }}</p>
       <div class = "genreButtons">
       <div v-for="[key,value] in Object.entries(genres)" :key="key">
         <button class="genre" @click="recommended(key, value)">{{ value }}</button>
@@ -37,7 +37,7 @@
             <p>{{ item.title }}</p>
             <p>{{ item.artist }}</p>
             <button @click="playSong(item,item.title,item.artist,true)">Play Song</button>
-            {{ message5 }}
+            <p>{{ message5 }}</p>
           </ul>
       </div>
     </div>
