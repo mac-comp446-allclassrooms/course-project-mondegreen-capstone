@@ -21,17 +21,32 @@ cd mondegreen
 npm install
 ```
 ```bash
-pip install flask flask_cors flask_sqlalchemy sqlalchemy.orm werkzeug.security lyricsgenius
+pip install flask
+pip install flask_cors
+pip install flask_sqlalchemy
+pip install sqlalchemy.orm werkzeug
+pip install lyricsgenius
 ```
 
 ## Running the Project
 
 To run our project, in one terminal window run the backend:
+
+MacOS:
 ```bash
 cd server
-flask run --port=5001 --debug
+flask run --port=5001
 ```
+
+Windows:
+```bash
+cd server
+python -m flask run --port 5001
+```
+
 In a second terminal window run the frontend:
+
+MacOS and Windows:
 ```bash
 cd mondegreen
 npm run dev
