@@ -51,10 +51,6 @@ def getLyrics(title, artist):
     return "Lyrics not found"
 
 def searchMulti(term):
-    results = genius.search(search_term=term, per_page=20, type_='song')
-    return results
-
-def searchMulti2(term):
     data = genius.search(search_term=term, per_page=9, type_='song')
 
     songs = []
@@ -94,24 +90,7 @@ def searchMulti2(term):
     for song in songs:
         results.append(f"Title: {song['title']}, Artist: {song['artist']}, Release Date: {song['release_date']}, URL: {song['url']}, Pageviews: {song['pageviews']}, ImageURL: {song['song_art_image_thumbnail_url']}")
     return songs
-# songs = data['hits']
 
-# for song in songs:
-
-#     result = song['result']
-
-#     title = result['title']
-
-#     artist = result['artist_names']
-
-#     release_date = result.get('release_date_for_display', 'N/A')
-
-#     url = result['url']
-
-#     print(f"Title: {title}, Artist: {artist}, Release Date: {release_date}, URL: {url}")
-# print(song.song_art_image_thumbnail_url)
-
-# print(searchMulti("Firework"))
 def searchGenre(genre):
     data = genius.tag(genre, page=1)
 
@@ -127,8 +106,6 @@ def searchGenre(genre):
         results.append(song_data)
 
     return results
-
-# print(searchGenre("pop"))
 
 def getCover(title, artist):
     song = genius.search_song(title, artist)

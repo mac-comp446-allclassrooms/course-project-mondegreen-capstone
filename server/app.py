@@ -186,8 +186,7 @@ def setup():
 
 #
 # ROUTES
-#
-    
+# 
 @app.route('/')
 def index():
     return "hello"
@@ -202,6 +201,7 @@ def admin():
     return render_template('admin.html', all_users = all_users)
 
     ### GENIUS API ROUTES
+# calls the getLyrics function from genius.py; returns the lyrics and cover of the song
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
@@ -212,22 +212,22 @@ def lyrics(title = None, artist = None):
         'cover': songCover
     })
 
+# calls the searchMulti function from genius.py; returns a list of songs that match the search term
 @app.route('/genius/search/<term>', methods = ['GET', 'POST'])
 def searchSong(term = None):
     # parse data
     results = searchMulti(term)
     return results
 
-# TODO: change this redundancy
-@app.route('/genius/search2/<term>', methods = ['GET', 'POST'])
-def searchSong2(term = None):
-    # parse data
-    results = searchMulti2(term)
-    return results
+## eliminated because of the redundant searchSong function
+# @app.route('/genius/search2/<term>', methods = ['GET', 'POST'])
+# def searchSong2(term = None):
+#     results = searchMulti2(term)
+#     return results
 
+# calls the searchGenre function from genius.py; returns a list of songs in the genre
 @app.route('/genius/genre/<genre>/', methods = ['GET', 'POST'])
 def searchGenre2(genre = None):
-    # parse data
     results = searchGenre(genre)
     return results
 

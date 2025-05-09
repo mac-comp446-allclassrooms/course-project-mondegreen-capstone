@@ -4,15 +4,7 @@
       <button>Log In</button>
     </router-link>
     <h2 id="search">Search for a song:</h2>
-    <!-- <div>
-      <input type="text" v-model="searchTitle" placeholder="Enter song" />
-      <input v-on:keyup.enter="submitSearch" type="text" v-model="searchArtist" placeholder="Enter artist" />
-      <button @click="submitSearch">Search</button>
-      {{ message }}
-    </div>
-    <p>Or</p> -->
     {{ message2 }}
-    <!-- <p>More general search</p> -->
     <div >
       <input v-on:keyup.enter="generalSearch" type="text" v-model="searchGeneral" placeholder="Enter Song" />
       <button @click="generalSearch">Search</button>
@@ -41,7 +33,6 @@
 
     <div class="songcontainerHome">
       <div class = "songHome" v-for="item in recommendation" :key="item.title">
-          <!-- <img style="width: 10%; background-color: aliceblue;" src="../assets/image.png" :alt="item.title"> -->
           <ul>
             <p>{{ item.title }}</p>
             <p>{{ item.artist }}</p>
@@ -74,6 +65,7 @@ export default {
       lyrics: "",
       message: "",
       message2: "",
+      // list of songs returned from the search
       scores: [],
       genres: {
         "rap": "Rap",
@@ -84,7 +76,8 @@ export default {
         "non-music": "Non-Music"
       },
       message3: "",
-      recommendation: [],
+      // list of recommended songs based on the genre
+      recommendation: [], 
       message5: "",
       showRecs: true,
       howTo: false,
@@ -94,8 +87,9 @@ export default {
     toggleHowTo() {
       this.howTo = !this.howTo;
     },
+    // function to search for a song by title and artist; more specific and requires accurate input 
+    // no longer used
     submitSearch() {
-       // song name and artist
       const title = this.searchTitle.trim();
       const artist = this.searchArtist.trim();
       this.message = `Searching for "${title}" by "${artist}"...`;
@@ -125,15 +119,17 @@ export default {
         alert("Please enter both song title and artist.");
       }
     },
+    // function to search for a song by title
     generalSearch() {
       // song name
       const title = this.searchGeneral.trim();
-      this.message2 = `Searching for "${title}"...`;
+      
       this.message3 = '';
       this.message5 = '';
 
       if (title) {
-        axios.get(`http://localhost:5001/genius/search2/${encodeURIComponent(title)}`)
+        this.message2 = `Searching for "${title}"...`;
+        axios.get(`http://localhost:5001/genius/search/${encodeURIComponent(title)}`)
           .then(response => {
             this.scores = response.data;
             this.message2 = '';
@@ -146,6 +142,7 @@ export default {
         alert("Please enter a song title.");
       }
     }, 
+    // function to play the song/start game; passes the song title and artist to the game
     playSong(item,title, artist,recommendBool) {
       this.showRecs = false;
       this.message2 = '';
@@ -178,7 +175,8 @@ export default {
         alert("Something went wrong. Please try again.");
       }
     },
-    recommended(genre, label) {
+    // returns a list of recommended songs based on the genre
+    recommended(genre, label) { 
       this.message2 = '';
       this.message5 = '';
       this.message3 = `Looking for some songs in "${label}"...`;

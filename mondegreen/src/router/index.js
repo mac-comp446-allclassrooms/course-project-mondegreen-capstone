@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import HowToView from '../views/HowToView.vue'
 import GameView from '../views/GameView.vue'
 
+// routes for the app
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

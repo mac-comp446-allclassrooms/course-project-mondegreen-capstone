@@ -79,6 +79,7 @@ onMounted(() => {
     document.appendChild(arrayDiv);
   }
 });
+// function to copy the results to clipboard; https://m-t-a.medium.com/javascript-creating-a-copy-button-with-the-clipboard-api-41bab347e601
 function copyToClipboardQuit(title, artist) {
   const textToCopy = document.querySelector("#score_pQ");
   if (textToCopy) {

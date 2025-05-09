@@ -11,7 +11,8 @@ const store = createStore({
     artist: '',
     userid: -1,
   },
-  mutations: {
+  // stores values that have been "committed" to the store
+  mutations: { 
     setLyrics(state, lyrics) {
       state.lyrics = lyrics;
     },
@@ -28,6 +29,7 @@ const store = createStore({
       state.userid = id;
     }
   },
+  // retrieves values from the store
   getters: {
     getLyrics(state) {
       return state.lyrics;
