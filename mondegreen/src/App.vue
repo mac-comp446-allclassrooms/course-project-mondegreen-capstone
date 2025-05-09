@@ -1,3 +1,5 @@
+<!-- Those are the Lyrics? web app hosted on Vue -->
+
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 </script>
