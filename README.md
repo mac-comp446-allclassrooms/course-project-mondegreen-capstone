@@ -17,6 +17,7 @@ For our project, you need to have Python and Node.js installed on your device.
 
 In order to run our application, you must run the following:
 ```bash
+cd mondegreen
 npm install
 ```
 ```bash
