@@ -83,7 +83,7 @@ onMounted(() => {
 function copyToClipboardQuit(title, artist) {
   const textToCopy = document.querySelector("#score_pQ");
   if (textToCopy) {
-    navigator.clipboard.writeText("Those are the Lyrics? " + title + " by " + artist + "\n Try again next time ;-; \n Your score: " + textToCopy.textContent || "").then(() => {
+    navigator.clipboard.writeText("Those are the Lyrics? \n" + title + " by " + artist + "\n Try again next time ;-; \n Your score: " + textToCopy.textContent || "").then(() => {
       alert("Results copied to clipboard!");
     });
   }
@@ -91,7 +91,7 @@ function copyToClipboardQuit(title, artist) {
 function copyToClipboardWin(title, artist) {
   const textToCopy = document.querySelector("#score_p");
   if (textToCopy) {
-    navigator.clipboard.writeText("Those are the Lyrics? " + title + " by " + artist + "\n Congrats! You did it! \n Your score: " + textToCopy.textContent || "").then(() => {
+    navigator.clipboard.writeText("Those are the Lyrics? \n" + title + " by " + artist + "\n Congrats! You did it! \n Your score: " + textToCopy.textContent || "").then(() => {
       alert("Results copied to clipboard!");
     });
   }
