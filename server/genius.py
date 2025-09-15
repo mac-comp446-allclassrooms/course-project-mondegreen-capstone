@@ -92,7 +92,11 @@ def searchMulti(term):
     return songs
 
 def searchGenre(genre):
+    print('Genre: ', genre)
     data = genius.tag(genre, page=1)
+    if genre == 'r-b':
+        data = lyricsgenius.Genius.tag('r-b', page=1)
+    print("Genre data: ", data)
 
     results = []
     songs = data['hits']
