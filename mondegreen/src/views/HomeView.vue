@@ -1,8 +1,5 @@
 <template>
   <main>
-    <router-link to="/login" aria-label="Log In" id="userLink">
-      <button>Log In</button>
-    </router-link>
     <h2 id="search">Search for a song:</h2>
     <p>{{ message2 }}</p>
     <div >
