@@ -21,26 +21,7 @@
         </div>
     </div>
     </div>
-    <div id="recs" v-if="showRecs">
-      <h3>Want to be recommended some songs? Select a genre:</h3> 
-      <p>{{ message3 }}</p>
-      <div class = "genreButtons">
-      <div v-for="[key,value] in Object.entries(genres)" :key="key">
-        <button class="genre" @click="recommended(key, value)">{{ value }}</button>
-      </div>
-    </div>
-  </div>
 
-    <div class="songcontainerHome">
-      <div class = "songHome" v-for="item in recommendation" :key="item.title">
-          <ul>
-            <p>{{ item.title }}</p>
-            <p>{{ item.artist }}</p>
-            <button @click="playSong(item,item.title,item.artist,true)">Play Song</button>
-            <p>{{ message5 }}</p>
-          </ul>
-      </div>
-    </div>
     <p>Just starting?</p>
 
     <button @click="toggleHowTo">How to play</button>
@@ -67,19 +48,11 @@ export default {
       message2: "",
       // list of songs returned from the search
       scores: [],
-      genres: {
-        "rap": "Rap",
-        "pop": "Pop",
-        "r-b": "R & B",
-        "rock": "Rock",
-        "country": "Country",
-        "non-music": "Non-Music"
-      },
       message3: "",
       // list of recommended songs based on the genre
       recommendation: [], 
       message5: "",
-      showRecs: true,
+      showRecs: false,
       howTo: false,
     };
   },
