@@ -91,25 +91,26 @@ def searchMulti(term):
         results.append(f"Title: {song['title']}, Artist: {song['artist']}, Release Date: {song['release_date']}, URL: {song['url']}, Pageviews: {song['pageviews']}, ImageURL: {song['song_art_image_thumbnail_url']}")
     return songs
 
-def searchGenre(genre):
-    print('Genre: ', genre)
-    data = genius.tag(genre, page=1)
-    if genre == 'r-b':
-        data = lyricsgenius.Genius.tag('r-b', page=1)
-    print("Genre data: ", data)
+# Not implemented
+# def searchGenre(genre):
+#     print('Genre: ', genre)
+#     data = genius.tag(name = genre)
+#     if genre == 'r-b':
+#         data = genius.tag(name =  'r-b')
+#     print("Genre data: ", data)
 
-    results = []
-    songs = data['hits']
+#     results = []
+#     songs = data['hits']
 
-    for song in songs:
-        song_data = {
-        'title' : song['title'],
-        'artist' : song['artists'][0]
-        }
+#     for song in songs:
+#         song_data = {
+#         'title' : song['title'],
+#         'artist' : song['artists'][0]
+#         }
 
-        results.append(song_data)
+#         results.append(song_data)
 
-    return results
+#     return results
 
 def getCover(title, artist):
     song = genius.search_song(title, artist)
