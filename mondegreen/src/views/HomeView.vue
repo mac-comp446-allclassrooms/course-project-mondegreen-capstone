@@ -1,8 +1,5 @@
 <template>
   <main>
-    <router-link to="/login" aria-label="Log In" id="userLink">
-      <button>Log In</button>
-    </router-link>
     <h2 id="search">Search for a song:</h2>
     <p>{{ message2 }}</p>
     <div >
@@ -85,7 +82,7 @@ export default {
             }
           })
           .catch(error => {
-            this.message = `Error searching for "${title}" by "${artist}"...`;
+            this.message = `Genius Lyrics experienced an error searching for "${title}" by "${artist}"... \n Please try a different entry!`;
             console.error("Error fetching lyrics:", error);
           });
       } else {
@@ -108,7 +105,7 @@ export default {
             this.message2 = '';
           })
           .catch(error => {
-            this.message2 = `Error searching for "${title}"...`;
+            this.message2 = `Genius Lyrics experienced an error searching for "${title}" \n Please try a different song!`
             console.error("Error fetching lyrics:", error);
           });
       } else {
@@ -141,7 +138,7 @@ export default {
             });
           })
           .catch(error => {
-            this.message5 = `Error starting game for "${title}" by "${artist}"...`;
+            this.message5 = `Genius Lyrics experienced an error starting game for "${title}" by "${artist}"... \n Please try a different song!`;
             console.error("Error fetching lyrics:", error);
           });
       } else {

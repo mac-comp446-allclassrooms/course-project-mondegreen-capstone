@@ -9,7 +9,7 @@
       <h2 class="item2">{{title}} by {{artist}}</h2>
       <p id="currScore" class="item3">Current Score: 0</p>
       <p id="currTotalLyrics" class="item4">Guessed Lyrics: 0/</p>
-      <form class="item5">
+  <form class="item5" @submit.prevent>
         <label name="guess" id="guessLabel" class="item6">Enter Lyric: </label>
         <input type="text" name="guess" id="guessInput" class="item7">
         <p id="already_guessed" style="visibility:hidden;" class="item8">Already Guessed</p>

@@ -4,6 +4,7 @@
 # flask run --port=5001 --debug
 #
 
+# from typing_extensions import Self
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from genius import *
