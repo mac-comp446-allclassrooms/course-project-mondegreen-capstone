@@ -1,7 +1,8 @@
 # Those are the Lyrics?
 
-("Those are the Lyrics?")[thosearethelyrics.netlify.app] is a song lyric game made by Michelle Dong, Redding Sauter, and Kendall Sullivan in Joslenne Peña's Internet Computing capstone course at Macalester College. The purpose of the game is to search for a song and then try to guess the lyrics to that song the best you can. There is an optional login that is intended to save the statistics from the user (what songs they tried, what their scores were) however it is not fully implemented at this time so the game stats is hardcoded. However, the main game is still functional.
+"Those are the Lyrics?"  is a song lyric game made by Michelle Dong, Redding Sauter, and Kendall Sullivan in Joslenne Peña's Internet Computing capstone course at Macalester College. The purpose of the game is to search for a song and then try to guess the lyrics to that song the best you can. There is an optional login that is intended to save the statistics from the user (what songs they tried, what their scores were) however it is not fully implemented at this time so the game stats is hardcoded. However, the main game is still functional.
 
+[thosearethelyrics.netlify.app]
 ## Tech Stack
 
 Our project is hosted on Vue.js.
