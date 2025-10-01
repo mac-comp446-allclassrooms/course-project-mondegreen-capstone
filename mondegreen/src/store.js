@@ -9,7 +9,6 @@ const store = createStore({
     lyrics: '',
     title: '',
     artist: '',
-    userid: -1,
   },
   // stores values that have been "committed" to the store
   mutations: { 
@@ -24,9 +23,6 @@ const store = createStore({
     },
     setCover(state, cover) {
       state.cover = cover;
-    },
-    setId(state, id) {
-      state.userid = id;
     }
   },
   // retrieves values from the store
@@ -42,9 +38,6 @@ const store = createStore({
     },
     getCover(state) {
       return state.cover;
-    },
-    getId(state) {
-      return state.id;
     }
   },
 });

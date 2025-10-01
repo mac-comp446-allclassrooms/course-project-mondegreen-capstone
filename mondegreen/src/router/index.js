@@ -19,11 +19,6 @@ const router = createRouter({
       component: GameView,
     },
     {
-      path: '/user',
-      name: 'user',
-      component: SongView,
-    },
-    {
       path: '/howto',
       name: 'howto',
       component: HowToView,
