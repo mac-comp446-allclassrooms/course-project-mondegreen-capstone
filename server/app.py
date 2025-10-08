@@ -53,10 +53,10 @@ def searchSong(term = None):
 #     return results
 
 # calls the searchGenre function from genius.py; returns a list of songs in the genre
-@app.route('/genius/genre/<genre>/', methods = ['GET', 'POST'])
-def searchGenre2(genre = None):
-    results = searchGenre(genre)
-    return results
+# @app.route('/genius/genre/<genre>/', methods = ['GET', 'POST'])
+# def searchGenre2(genre = None):
+#     results = searchGenre(genre)
+#     return results
 
 #
 # RUN
