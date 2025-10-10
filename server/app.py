@@ -7,7 +7,6 @@
 # from typing_extensions import Self
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
-from genius import *
 
 # instantiate the app
 app = Flask(__name__)
