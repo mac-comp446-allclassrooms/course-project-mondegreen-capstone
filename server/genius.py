@@ -93,29 +93,18 @@ def searchMulti(term):
         results.append(f"Title: {song['title']}, Artist: {song['artist']}, Release Date: {song['release_date']}, URL: {song['url']}, Pageviews: {song['pageviews']}, ImageURL: {song['song_art_image_thumbnail_url']}")
     return songs
 
-# Not implemented
-# def searchGenre(genre):
-#     print('Genre: ', genre)
-#     data = genius.tag(name = genre)
-#     if genre == 'r-b':
-#         data = genius.tag(name =  'r-b')
-#     print("Genre data: ", data)
-
-#     results = []
-#     songs = data['hits']
-
-#     for song in songs:
-#         song_data = {
-#         'title' : song['title'],
-#         'artist' : song['artists'][0]
-#         }
-
-#         results.append(song_data)
-
-#     return results
-
 def getCover(title, artist):
     song = genius.search_song(title, artist)
     if song:
         return song.song_art_image_thumbnail_url
     return "Cover not found"
+
+def makeSongsTxt():
+    songs_dict = {"Firework":"Katy Perry", "Take Me Home, Country Roads":"John Denver", "Superstition":"Stevie Wonder"}
+    with open("server/songs.txt", "w") as songs_txt:
+        for curr_title, curr_artist in songs_dict.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + " by " + curr_artist + ":" + lyrics + "\n")
+
+makeSongsTxt()
