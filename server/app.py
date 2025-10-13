@@ -30,7 +30,7 @@ def ping_pong():
 @app.route('/lyrics/list', methods = ['GET', 'POST'])
 def list():
     songList = getList()
-    return jsonify({songList})
+    return jsonify({str(songList)})
 
     ### GENIUS API ROUTES
 # calls the getLyrics function from genius.py; returns the lyrics and cover of the song
