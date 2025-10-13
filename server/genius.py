@@ -105,6 +105,6 @@ def makeSongsTxt():
         for curr_title, curr_artist in songs_dict.items():
             lyrics = getLyrics(curr_title, curr_artist)
             lyrics = clean_lyrics(lyrics)
-            songs_txt.write(curr_title + " by " + curr_artist + ":" + lyrics + "\n")
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
 
 makeSongsTxt()

@@ -7,6 +7,7 @@
 # from typing_extensions import Self
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
+from lyrics import *
 
 # instantiate the app
 app = Flask(__name__)
@@ -31,35 +32,10 @@ def ping_pong():
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
-    songCover = getCover(title, artist)
     return jsonify({
         'status': 'success',
         'lyrics': songLyrics,
-        'cover': songCover
     })
-
-# calls the searchMulti function from genius.py; returns a list of songs that match the search term
-@app.route('/genius/search/<term>', methods = ['GET', 'POST'])
-def searchSong(term = None):
-    # parse data
-    results = searchMulti(term)
-    return results
-
-## eliminated because of the redundant searchSong function
-# @app.route('/genius/search2/<term>', methods = ['GET', 'POST'])
-# def searchSong2(term = None):
-#     results = searchMulti2(term)
-#     return results
-
-# calls the searchGenre function from genius.py; returns a list of songs in the genre
-# @app.route('/genius/genre/<genre>/', methods = ['GET', 'POST'])
-# def searchGenre2(genre = None):
-#     results = searchGenre(genre)
-#     return results
-
-#
-# RUN
-#
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
