@@ -2,10 +2,13 @@
   <main>
     <h2 id = "search"> Available Songs: </h2>
     <p>{{ message2 }}</p>
+    <button @click="loadSongs">Load Songs</button>
     <div class = "songcontainerHome">
       <div class = "songHome" v-for="item in scores" :key="item">
       <ul>
         <p>{{ item }}</p>
+        <button @click="playSong(item)">Play Song</button>
+        <p>{{ message5 }}</p>
       </ul>
       </div>
     </div>
@@ -28,26 +31,62 @@ export default {
   data() {
     return {
       message2: '',
+      message5: '',
       scores: [],
       howTo: false
     };
   },
   methods: {
     toggleHowTo() {
+      console.log('Toggle!');
       this.howTo = !this.howTo;
     },
     loadSongs() {
+      console.log('Loading songs');
       axios.get(`http://localhost:5001/lyrics/list`)
         .then(response => {
+        console.log(response.data.list);
         this.message2 = '';
-        this.scores = response.data;
+        this.scores = response.data.list;
+        for (let i = 0; i < response.data.list.length; i++) {
+          setInfo(response.data.list[i]);
+        }
       })
       .catch(error => {
       this.message2 = 'Failed to fetch songs';
       })
     },
-    created() {
-      this.loadSongs()
+    setInfo(item){
+      const index = item.indexOf(':');
+      const strSplit = item.split(':');
+      store.setTitle(strSplit[0]);
+      store.setArtist(strSplit[1]);
+      store.setLyrics(strSplit[2]);
+      store.setCover(strSplit[3]);
+    },
+    playSong(item) {
+      this.message2 = '';
+      this.message5 = `Starting game: "${item}"`;
+
+      if (title && artist) {
+        axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
+          .then(response => {
+            this.message2 = '';
+            store.commit('setLyrics', response.data.lyrics);
+            store.commit('setTitle', title);
+            store.commit('setArtist', artist);
+            store.commit('setCover', response.data.cover);
+            this.$router.push({
+              path: '/game'
+            });
+          })
+          .catch(error => {
+            this.message5 = `Error starting game for "${title}" by "${artist}"...`;
+            console.error("Error fetching lyrics:", error);
+          });
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   },
 };
