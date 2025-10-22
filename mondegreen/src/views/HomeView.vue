@@ -1,24 +1,14 @@
 <template>
   <main>
-    <h2 id="search">Search for a song:</h2>
+    <h2 id = "search"> Available Songs: </h2>
     <p>{{ message2 }}</p>
-    <div >
-      <input v-on:keyup.enter="generalSearch" type="text" v-model="searchGeneral" placeholder="Enter Song" />
-      <button @click="generalSearch">Search</button>
-      <div class="songcontainerHome">
-        <div class = "songHome" v-for="item in scores" :key="item.title">
-            <img :src="item.song_art_image_thumbnail_url" :alt="item.title">
-            <ul>
-              <p>{{ item.title }}</p>
-              <p>{{ item.artist }}</p>
-              <button @click="playSong(item,item.title,item.artist,false)">Play Song</button>
-              <p>{{ message5 }}</p>
-            </ul>
-            
-        </div>
+    <div class = "songcontainerHome">
+      <div class = "songHome" v-for="item in scores" :key="item">
+      <ul>
+        <p>{{ item }}</p>
+      </ul>
+      </div>
     </div>
-    </div>
-
     <p>Just starting?</p>
 
     <button @click="toggleHowTo">How to play</button>
@@ -37,134 +27,27 @@ export default {
   name: "HomeView",
   data() {
     return {
-      searchTitle: "",
-      searchArtist: "",
-      searchGeneral: "",
-      lyrics: "",
-      message: "",
-      message2: "",
-      // list of songs returned from the search
+      message2: '',
       scores: [],
-      message3: "",
-      // list of recommended songs based on the genre
-      recommendation: [], 
-      message5: "",
-      showRecs: false,
-      howTo: false,
+      howTo: false
     };
   },
   methods: {
     toggleHowTo() {
       this.howTo = !this.howTo;
     },
-    // function to search for a song by title and artist; more specific and requires accurate input 
-    // no longer used
-    submitSearch() {
-      const title = this.searchTitle.trim();
-      const artist = this.searchArtist.trim();
-      this.message = `Searching for "${title}" by "${artist}"...`;
-      
-
-      if (title && artist) {
-        axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
-          .then(response => {
-            this.message = '';
-            if (response.data.lyrics === "Lyrics not found") {
-              this.message = "Lyrics not found";
-            } else {
-              this.message = `Found lyrics for "${title}" by "${artist}"`;
-              store.commit('setLyrics', response.data.lyrics);
-              store.commit('setTitle', title);
-              store.commit('setArtist', artist);
-              this.$router.push({
-                path: '/game'
-              });
-            }
-          })
-          .catch(error => {
-            this.message = `Genius Lyrics experienced an error searching for "${title}" by "${artist}"... \n Please try a different entry!`;
-            console.error("Error fetching lyrics:", error);
-          });
-      } else {
-        alert("Please enter both song title and artist.");
-      }
-    },
-    // function to search for a song by title
-    generalSearch() {
-      // song name
-      const title = this.searchGeneral.trim();
-      
-      this.message3 = '';
-      this.message5 = '';
-
-      if (title) {
-        this.message2 = `Searching for "${title}"...`;
-        axios.get(`http://localhost:5001/genius/search/${encodeURIComponent(title)}`)
-          .then(response => {
-            this.scores = response.data;
-            this.message2 = '';
-          })
-          .catch(error => {
-            this.message2 = `Genius Lyrics experienced an error searching for "${title}" \n Please try a different song!`
-            console.error("Error fetching lyrics:", error);
-          });
-      } else {
-        alert("Please enter a song title.");
-      }
-    }, 
-    // function to play the song/start game; passes the song title and artist to the game
-    playSong(item,title, artist,recommendBool) {
-      this.showRecs = false;
-      this.message2 = '';
-      this.message5 = `Starting game: "${title}" by "${artist}"...`;
-      if (recommendBool === true) {
-        this.recommendation = [item];
-        this.scores = [];
-      } else {
-        this.recommendation = [];
-        this.scores = [item];
-      }
-
-      if (title && artist) {
-        axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
-          .then(response => {
-            this.message2 = '';
-            store.commit('setLyrics', response.data.lyrics);
-            store.commit('setTitle', title);
-            store.commit('setArtist', artist);
-            store.commit('setCover', response.data.cover);
-            this.$router.push({
-              path: '/game'
-            });
-          })
-          .catch(error => {
-            this.message5 = `Genius Lyrics experienced an error starting game for "${title}" by "${artist}"... \n Please try a different song!`;
-            console.error("Error fetching lyrics:", error);
-          });
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    },
-    // returns a list of recommended songs based on the genre
-    recommended(genre, label) { 
-      this.message2 = '';
-      this.message5 = '';
-      this.message3 = `Looking for some songs in "${label}"...`;
-      axios.get(`http://localhost:5001/genius/genre/${encodeURIComponent(genre)}`)
-          .then(response => {
-            this.message3 = '';
-            this.recommendation = response.data;
-          })
-          .catch(error => {
-            this.message3 = `Error searching for "${genre}"...`;
-            console.error("Error fetching lyrics:", error);
-          });
+    loadSongs() {
+      axios.get(`http://localhost:5001/lyrics/list`)
+        .then(response => {
+        this.message2 = '';
+        this.scores = response.data;
+      })
+      .catch(error => {
+      this.message2 = 'Failed to fetch songs';
+      })
     },
     created() {
-      this.submitSearch();
-      this.generalSearch();
-      this.playSong();
-      this.recommended();
+      this.loadSongs()
     }
   },
 };
