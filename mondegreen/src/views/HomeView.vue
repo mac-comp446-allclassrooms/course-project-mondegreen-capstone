@@ -46,8 +46,7 @@ export default {
       console.log('Loading songs');
       axios.get(`http://localhost:5001/lyrics/list`)
         .then(response => {
-        console.log(response.data.list);
-        this.scores = response.data.list;
+          this.scores = response.data.list;
       })
       .catch(error => {
       this.message2 = 'Failed to fetch songs';
@@ -76,16 +75,16 @@ export default {
       const url = `http://localhost:5001/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
       console.log(url)
       axios.get(url)
-      .then(response => {
-        console.log(response.lyrics);
-        const lyrics = response.lyrics;
-        store.commit('setLyrics', lyrics);
-        store.commit('setTitle', raw_title);
-        store.commit('setArtist', raw_artist);
-        this.$router.push({
-          path: '/game'
-        });
-      })
+        .then(response => {
+          
+          const lyrics = response.data.lyrics;
+          store.commit('setLyrics', lyrics);
+          store.commit('setTitle', raw_title);
+          store.commit('setArtist', raw_artist);
+          this.$router.push({
+            path: '/game'
+          });
+        })
       .catch(error => {
       this.message2 = 'Failed to fetch lyrics';
       })  

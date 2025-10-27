@@ -56,7 +56,7 @@ const title = computed(() => store.getters.getTitle);
 const artist = computed(() => store.getters.getArtist);
 const id = computed(() => store.getters.getId);
 
-
+console.log(lyrics);
 lyrics.value = lyrics.value.replace(/_/g, ' ');
 const lyrics_array = lyrics.value.split(" ");
 lyrics_array.shift();
