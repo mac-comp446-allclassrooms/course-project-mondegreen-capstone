@@ -44,7 +44,7 @@ export default {
     },
     loadSongs() {
       console.log('Loading songs');
-      axios.get(`http://localhost:5001/lyrics/list`)
+      axios.get(`https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/list`)
         .then(response => {
           this.scores = response.data.list;
       })
@@ -72,7 +72,7 @@ export default {
       const title = raw_title.replaceAll("-", " ");
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
-      const url = `http://localhost:5001/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
+      const url = `https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
       console.log(url)
       axios.get(url)
         .then(response => {
