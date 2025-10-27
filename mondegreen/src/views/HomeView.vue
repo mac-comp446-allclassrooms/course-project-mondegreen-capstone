@@ -70,17 +70,18 @@ export default {
       this.message5 = `Starting game: "${item}"`;
       const strSplit = item.split(':');
       const raw_title = strSplit[0];
-      console.log(raw_title);
       const title = raw_title.replaceAll("-", " ");
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
-      axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
+      const url = `http://localhost:5001/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
+      console.log(url)
+      axios.get(url)
       .then(response => {
         console.log(response.lyrics);
         const lyrics = response.lyrics;
         store.commit('setLyrics', lyrics);
-        store.commit('setTitle', title);
-        store.commit('setArtist', artist);
+        store.commit('setTitle', raw_title);
+        store.commit('setArtist', raw_artist);
         this.$router.push({
           path: '/game'
         });

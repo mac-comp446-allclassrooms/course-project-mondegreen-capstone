@@ -3,9 +3,6 @@
 <template>
   <div class="game">
     <div class="game_base">
-      <div id="cover" class="item1">
-        <img :src="cover" alt="Album Cover" />
-      </div>
       <h2 class="item2">{{title}} by {{artist}}</h2>
       <p id="currScore" class="item3">Current Score: 0</p>
       <p id="currTotalLyrics" class="item4">Guessed Lyrics: 0/</p>
@@ -57,7 +54,6 @@ const route = useRoute();
 let lyrics = computed(() => store.getters.getLyrics);
 const title = computed(() => store.getters.getTitle);
 const artist = computed(() => store.getters.getArtist);
-const cover = computed(() => store.getters.getCover);
 const id = computed(() => store.getters.getId);
 
 
