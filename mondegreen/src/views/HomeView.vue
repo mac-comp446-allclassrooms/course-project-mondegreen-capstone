@@ -26,6 +26,7 @@ import axios from 'axios';
 import store from '../store';
 import HowToView from './HowToView.vue';
 
+
 export default {
   components: { HowToView },
   name: "HomeView",
@@ -79,8 +80,8 @@ export default {
           
           const lyrics = response.data.lyrics;
           store.commit('setLyrics', lyrics);
-          store.commit('setTitle', raw_title);
-          store.commit('setArtist', raw_artist);
+          store.commit('setTitle', title);
+          store.commit('setArtist', artist);
           this.$router.push({
             path: '/game'
           });
