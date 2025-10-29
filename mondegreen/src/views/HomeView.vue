@@ -2,7 +2,6 @@
   <main>
     <h2 id = "search"> Available Songs: </h2>
     <p>{{ message2 }}</p>
-    <button @click="loadSongs">Load Songs</button>
     <div class = "songcontainerHome">
       <div class = "songHome" v-for="item in scores" :key="item">
       <ul>
@@ -37,13 +36,8 @@ export default {
       howTo: false
     };
   },
-  methods: {
-    toggleHowTo() {
-      console.log('Toggle!');
-      this.howTo = !this.howTo;
-    },
-    loadSongs() {
-      console.log('Loading songs');
+  created() {
+    console.log('Loading songs');
       axios.get(`https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/list`)
         .then(response => {
           this.scores = response.data.list;
@@ -51,6 +45,11 @@ export default {
       .catch(error => {
       this.message2 = 'Failed to fetch songs';
       })
+  },
+  methods: {
+    toggleHowTo() {
+      console.log('Toggle!');
+      this.howTo = !this.howTo;
     },
     getTitle(item){
       const strSplit = item.split(':');
