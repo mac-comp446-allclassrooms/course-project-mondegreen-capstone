@@ -6,7 +6,8 @@
     <div class = "songcontainerHome">
       <div class = "songHome" v-for="item in scores" :key="item">
       <ul>
-        <p>{{ item }}</p>
+        <p> {{ getTitle(item) }}</p>
+        <p> {{ getArtist(item) }}</p>
         <button @click="playSong(item)">Play Song</button>
         <p>{{ message5 }}</p>
       </ul>
@@ -43,52 +44,52 @@ export default {
     },
     loadSongs() {
       console.log('Loading songs');
-      axios.get(`http://localhost:5001/lyrics/list`)
+      axios.get(`https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/list`)
         .then(response => {
-        console.log(response.data.list);
-        this.message2 = '';
-        this.scores = response.data.list;
-        for (let i = 0; i < response.data.list.length; i++) {
-          setInfo(response.data.list[i]);
-        }
+          this.scores = response.data.list;
       })
       .catch(error => {
       this.message2 = 'Failed to fetch songs';
       })
     },
-    setInfo(item){
-      const index = item.indexOf(':');
+    getTitle(item){
       const strSplit = item.split(':');
-      store.setTitle(strSplit[0]);
-      store.setArtist(strSplit[1]);
-      store.setLyrics(strSplit[2]);
-      store.setCover(strSplit[3]);
+      const title = strSplit[0];
+      const clean_title = title.replaceAll("-", " ");
+      return clean_title;
+    },
+    getArtist(item){
+      const strSplit = item.split(':');
+      const artist = strSplit[1];
+      const clean_artist = artist.replaceAll("-", " ");
+      return clean_artist;
     },
     playSong(item) {
       this.message2 = '';
       this.message5 = `Starting game: "${item}"`;
-
-      if (title && artist) {
-        axios.get(`http://localhost:5001/lyrics/${encodeURIComponent(title)}/${encodeURIComponent(artist)}`)
-          .then(response => {
-            this.message2 = '';
-            store.commit('setLyrics', response.data.lyrics);
-            store.commit('setTitle', title);
-            store.commit('setArtist', artist);
-            store.commit('setCover', response.data.cover);
-            this.$router.push({
-              path: '/game'
-            });
-          })
-          .catch(error => {
-            this.message5 = `Error starting game for "${title}" by "${artist}"...`;
-            console.error("Error fetching lyrics:", error);
+      const strSplit = item.split(':');
+      const raw_title = strSplit[0];
+      const title = raw_title.replaceAll("-", " ");
+      const raw_artist = strSplit[1];
+      const artist = raw_artist.replaceAll("-", " ");
+      const url = `https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
+      console.log(url)
+      axios.get(url)
+        .then(response => {
+          
+          const lyrics = response.data.lyrics;
+          store.commit('setLyrics', lyrics);
+          store.commit('setTitle', raw_title);
+          store.commit('setArtist', raw_artist);
+          this.$router.push({
+            path: '/game'
           });
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
+        })
+      .catch(error => {
+      this.message2 = 'Failed to fetch lyrics';
+      })  
     }
-  },
+  }
 };
 </script>
 
