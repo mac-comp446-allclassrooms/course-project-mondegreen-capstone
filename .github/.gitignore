@@ -4,3 +4,5 @@ server/__pycache__/
 server/instance/
 package-lock.json
 package.json
+*.env
+*.pyc
