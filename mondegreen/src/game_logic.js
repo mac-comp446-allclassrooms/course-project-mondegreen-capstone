@@ -5,7 +5,6 @@
 import word_freq_dict from './word_freqs.js'
 
 import router from './router/index.js';
-import axios from 'axios';
 
 class CurrentGame {
     constructor(song, currScore, word, currGuessedWordsTotal, title, artist) {
@@ -19,7 +18,6 @@ class CurrentGame {
 }
 
 export function playRound(song, title, artist) {
-    console.log("playRound called");
     let game = new CurrentGame(song, 0, "", 0, title, artist);
     const lyricsDiv = document.getElementById('lyrics');
     lyricsDiv.innerHTML = "";

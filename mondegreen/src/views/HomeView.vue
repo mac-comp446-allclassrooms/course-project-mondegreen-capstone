@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     toggleHowTo() {
-      console.log('Toggle!');
       this.howTo = !this.howTo;
     },
     getTitle(item){
@@ -73,12 +72,11 @@ export default {
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
       const url = `https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
-      console.log(url)
       axios.get(url)
         .then(response => {
-          
           const lyrics = response.data.lyrics;
-          store.commit('setLyrics', lyrics);
+          let cleanLyrics = lyrics.replace("\n", "");
+          store.commit('setLyrics', cleanLyrics);
           store.commit('setTitle', title);
           store.commit('setArtist', artist);
           this.$router.push({

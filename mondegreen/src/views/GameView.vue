@@ -61,8 +61,6 @@ lyrics.value = lyrics.value.replace(/_/g, ' ');
 const lyrics_array = lyrics.value.split(" ");
 lyrics_array.shift();
 lyrics_array.id = "array"
-console.log(lyrics_array);
-console.log(lyrics.value);
 
 onMounted(() => {
   if (lyrics.value === "Lyrics not found") {
