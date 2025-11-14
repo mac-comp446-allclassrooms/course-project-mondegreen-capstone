@@ -72,12 +72,8 @@ export default {
       const title = raw_title.replaceAll("-", " ");
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
-<<<<<<< Updated upstream
-      const url = `https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
-=======
-      const url = `${import.meta.env.VITE_SERVER_PATH}/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
+      const url = `${import.meta.env.VITE_SERVER_PATH}/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}`
       console.log(url)
->>>>>>> Stashed changes
       axios.get(url)
         .then(response => {
           const lyrics = response.data.lyrics;
@@ -91,7 +87,7 @@ export default {
         })
       .catch(error => {
       this.message2 = 'Failed to fetch lyrics';
-      })  
+      })
     }
   }
 };
