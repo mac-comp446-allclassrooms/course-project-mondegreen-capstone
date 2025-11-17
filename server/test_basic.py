@@ -1,18 +1,14 @@
 import pytest
-from app import app as flask_app
-
-print("IMPORTING !!!")
-@pytest.fixture()
-def app():
-    flask_app.config.update({
-        "TESTING": True,
-    })
-    yield app
-
+from server import create_app
 
 @pytest.fixture()
 def client():
-    return flask_app.test_client()
+    app = create_app("server/songs.txt")
+    app.config.update({
+        "TESTING": True,
+    })
+
+    return app.test_client()
 
 
 def test_request_example(client):
@@ -20,6 +16,11 @@ def test_request_example(client):
     print("RESPONSE DATA:", response.data)
     assert response.status_code == 200
     assert b"pong" in response.data
+
+def test_request_song_list(client):
+    response = client.get("/lyrics/list")
+    print("RESPONSE DATA:", response.data)
+    assert response.status_code == 200
 
 
 
