@@ -101,7 +101,7 @@ def getCover(title, artist):
 
 def makeSongsTxt():
     songs_dict = {"Firework":"Katy Perry", "Take Me Home, Country Roads":"John Denver", "Superstition":"Stevie Wonder"}
-    with open("songs.txt", "w") as songs_txt:
+    with open("application/songs.txt", "w") as songs_txt:
         for curr_title, curr_artist in songs_dict.items():
             lyrics = getLyrics(curr_title, curr_artist)
             lyrics = clean_lyrics(lyrics)

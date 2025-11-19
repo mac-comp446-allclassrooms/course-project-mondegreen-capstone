@@ -7,13 +7,13 @@
 # from typing_extensions import Self
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
-from server.song_data import SongData
+from server.application.song_data import SongData
 
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object(__name__)
     if test_config is None:
-        app.config['SOURCE_FILE'] = 'server/songs.txt'
+        app.config['SOURCE_FILE'] = 'server/application/songs.txt'
     else:
         app.config['SOURCE_FILE'] = test_config
 

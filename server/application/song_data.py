@@ -1,6 +1,4 @@
-import string
-import unicodedata
-from server.lyrics import get_list
+from server.application.lyrics import get_list
 
 class SongData:
     def __init__(self, filename):

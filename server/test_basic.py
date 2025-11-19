@@ -1,20 +1,15 @@
 import pytest
-from server.lyrics import get_list
-from server import create_app
+from application.lyrics import get_list
+from application import create_app
 from pathlib import Path
 
 @pytest.fixture()
 def client():
-    here = Path(__file__).resolve().parent
-    print(here)
-    song_file = here / "songs.txt"
-    print(song_file)
-
-    app = create_app(str(song_file))
-    #app = create_app("../songs.txt")
+    app = create_app("server/application/songs.txt")
     app.config.update({
         "TESTING": True,
     })
+
     return app.test_client()
 
 def create_tmp_songs(tmp_path,song_content):
