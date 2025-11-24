@@ -1,1 +1,1 @@
-web: cd ./server && waitress-serve wsgi:app
+web: waitress-serve wsgi:app
