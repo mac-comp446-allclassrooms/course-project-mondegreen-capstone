@@ -39,7 +39,8 @@ export default {
   },
   created() {
     console.log('Loading songs');
-      axios.get(`https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/list`)
+    //console.log(import.meta.env);
+      axios.get(`${import.meta.env.VITE_SERVER_PATH}/lyrics/list`)
         .then(response => {
           this.scores = response.data.list;
       })
@@ -71,7 +72,8 @@ export default {
       const title = raw_title.replaceAll("-", " ");
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
-      const url = `https://those-are-the-lyrics-fe11728950ff.herokuapp.com/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}` 
+      const url = `${import.meta.env.VITE_SERVER_PATH}/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}`
+      console.log(url)
       axios.get(url)
         .then(response => {
           const lyrics = response.data.lyrics;
@@ -85,7 +87,7 @@ export default {
         })
       .catch(error => {
       this.message2 = 'Failed to fetch lyrics';
-      })  
+      })
     }
   }
 };

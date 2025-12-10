@@ -8,6 +8,7 @@ import re
 import string
 import lyricsgenius
 import unicodedata
+import csv
 
 genius = lyricsgenius.Genius("79bSVlRX4YEmwomC2oIp_jiWPiGliEtArd2dsIlisD4NfHPPVuRdp-skYhQKmfgn", remove_section_headers=False)
 # artist = genius.search_artist("Taylor Swift", max_songs=1)
@@ -99,12 +100,42 @@ def getCover(title, artist):
         return song.song_art_image_thumbnail_url
     return "Cover not found"
 
+def read_songs_csv():
+    songs_array = []
+    with open('server/top_songs.csv', mode = 'r') as file:
+        csv_file = csv.reader(file)
+        for lines in csv_file:
+            songs_array.append(lines)
+    return songs_array
+
+def make_songs_dict():
+    songs = read_songs_csv()
+    songs.pop(0)
+    songs_dict = {}
+    for line in songs:
+        title_artist = {line[2]: line[1]}
+        songs_dict.update(title_artist)
+    print(songs_dict)
+    return songs_dict
+
+
 def makeSongsTxt():
     songs_dict = {"Firework":"Katy Perry", "Take Me Home, Country Roads":"John Denver", "Superstition":"Stevie Wonder"}
+    songs_dict2 = {"What Makes You Beautiful":"One Direction", "Wannabe":"Spice Girls", "Proud Mary":"Tina Turner"}
+    songs_dict3 = {"Mamma Mia":"ABBA", "Gnarly":"KATSEYE"}
     with open("songs.txt", "w") as songs_txt:
         for curr_title, curr_artist in songs_dict.items():
             lyrics = getLyrics(curr_title, curr_artist)
             lyrics = clean_lyrics(lyrics)
             songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
+        for curr_title, curr_artist in songs_dict2.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
+        for curr_title, curr_artist in songs_dict3.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
 
 makeSongsTxt()
+# make_songs_dict()
