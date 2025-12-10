@@ -12,7 +12,7 @@ from lyrics import *
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
-
+songs = []
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
@@ -29,14 +29,20 @@ def ping_pong():
 
 @app.route('/lyrics/list', methods = ['GET', 'POST'])
 def list():
-    songList = getList()
-    return jsonify({
-        'status': 'success',
-        'list': songList,
-    })
+    if len(songs) > 0:
+        return jsonify({
+            'status': 'success',
+            'list': songs,
+        })
+    else:
+        songs = getList()
+        return jsonify({
+            'status': 'failure',
+            'list': songs,
+        })
 
     ### GENIUS API ROUTES
-# calls the getLyrics function from genius.py; returns the lyrics and cover of the song
+# calls the getLyrics function from lyrics.py; returns the lyrics and cover of the song
 @app.route('/lyrics/<title>/<artist>', methods = ['GET', 'POST'])
 def lyrics(title = None, artist = None):
     songLyrics = getLyrics(title, artist)
@@ -46,4 +52,6 @@ def lyrics(title = None, artist = None):
     })
 
 if __name__ == '__main__':
+    songs = getList()
     app.run(debug=True, port=5001)
+    
