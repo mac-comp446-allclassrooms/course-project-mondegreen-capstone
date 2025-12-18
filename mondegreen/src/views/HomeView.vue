@@ -72,7 +72,7 @@ export default {
       const title = raw_title.replaceAll("-", " ");
       const raw_artist = strSplit[1];
       const artist = raw_artist.replaceAll("-", " ");
-      const url = `${import.meta.env.VITE_SERVER_PATH}/lyrics/${encodeURIComponent(raw_title.toLowerCase())}/${encodeURIComponent(raw_artist.toLowerCase())}`
+      const url = `${import.meta.env.VITE_SERVER_PATH}/lyrics/${encodeURIComponent(raw_title)}/${encodeURIComponent(raw_artist)}`
       console.log(url)
       axios.get(url)
         .then(response => {
