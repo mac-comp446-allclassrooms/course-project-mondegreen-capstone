@@ -1,0 +1,141 @@
+# pip install lyricsgenius
+# https://www.youtube.com/watch?v=CokKFmDnDtw
+# https://github.com/johnwmillr/LyricsGenius
+
+# if you're reading this, henry was able to push a commit!
+
+import re
+import string
+import lyricsgenius
+import unicodedata
+import csv
+
+genius = lyricsgenius.Genius("79bSVlRX4YEmwomC2oIp_jiWPiGliEtArd2dsIlisD4NfHPPVuRdp-skYhQKmfgn", remove_section_headers=False)
+# artist = genius.search_artist("Taylor Swift", max_songs=1)
+# songs = artist.songs
+# for song in songs:
+#     print(song.lyrics)
+
+def coverArt(title, artist):
+    song = genius.search_song(title, artist)
+    return song.song_art_image_thumbnail_url
+
+def clean_lyrics(lyrics):
+    lyrics = unicodedata.normalize("NFKD", lyrics)
+    song_start_brackets = re.search(r'\[.*?\]', lyrics)
+    if song_start_brackets:
+        lyrics = lyrics[song_start_brackets.start():]
+    else:
+        song_start_else = list(re.finditer(r'\.[^\s\'"]', lyrics))
+        if len(song_start_else) >= 2:
+            lyrics = lyrics[song_start_else[len(song_start_else)-1].start():]
+        elif song_start_else:
+            lyrics = lyrics[song_start_else[0].start():]
+    
+    lyrics = re.sub(r'\[.*?\]', ' ', lyrics)
+    lyrics = lyrics.replace('\n', ' ')
+    lyrics = lyrics.replace("'", '')
+    lyrics = re.sub(r'''      # used https://stackoverflow.com/questions/34860982/replace-the-punctuation-with-whitespace
+               \W+
+               \s*
+               ''',
+               ' ',
+               lyrics,
+               flags=re.VERBOSE)
+    return lyrics.lower()
+
+
+def getLyrics(title, artist):
+    song = genius.search_song(title, artist)
+    if song:
+        print(song.lyrics)
+        return clean_lyrics(song.lyrics)
+        # return song.lyrics
+    return "Lyrics not found"
+
+def searchMulti(term):
+    data = genius.search(search_term=term, per_page=9, type_='song')
+
+    songs = []
+
+    for section in data.get('sections', []):
+
+        if section.get('type') == 'song':
+
+            for hit in section.get('hits', []):
+
+                result = hit.get('result', {})
+
+    # Extract fields here
+
+                song_data = {
+
+                'title': result.get('title'),
+
+                'artist': result.get('artist_names'),
+
+                'release_date': result.get('release_date_for_display', 'N/A'),
+
+                'url': result.get('url'),
+
+                'song_art_image_thumbnail_url': result.get('song_art_image_thumbnail_url'),
+
+                'pageviews': result.get('stats', {}).get('pageviews', 0),
+
+                'annotations': result.get('annotation_count', 0)
+
+                }
+
+                songs.append(song_data)
+
+    results = []
+    # Print the results
+    for song in songs:
+        results.append(f"Title: {song['title']}, Artist: {song['artist']}, Release Date: {song['release_date']}, URL: {song['url']}, Pageviews: {song['pageviews']}, ImageURL: {song['song_art_image_thumbnail_url']}")
+    return songs
+
+def getCover(title, artist):
+    song = genius.search_song(title, artist)
+    if song:
+        return song.song_art_image_thumbnail_url
+    return "Cover not found"
+
+def read_songs_csv():
+    songs_array = []
+    with open('server/top_songs.csv', mode = 'r') as file:
+        csv_file = csv.reader(file)
+        for lines in csv_file:
+            songs_array.append(lines)
+    return songs_array
+
+def make_songs_dict():
+    songs = read_songs_csv()
+    songs.pop(0)
+    songs_dict = {}
+    for line in songs:
+        title_artist = {line[2]: line[1]}
+        songs_dict.update(title_artist)
+    print(songs_dict)
+    return songs_dict
+
+
+def makeSongsTxt():
+    songs_dict = {"Firework":"Katy Perry", "Take Me Home, Country Roads":"John Denver", "Superstition":"Stevie Wonder"}
+    songs_dict2 = {"What Makes You Beautiful":"One Direction", "Wannabe":"Spice Girls", "Proud Mary":"Tina Turner"}
+    songs_dict3 = {"Mamma Mia":"ABBA", "Gnarly":"KATSEYE"}
+    with open("songs.txt", "w") as songs_txt:
+        for curr_title, curr_artist in songs_dict.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
+        for curr_title, curr_artist in songs_dict2.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
+        for curr_title, curr_artist in songs_dict3.items():
+            lyrics = getLyrics(curr_title, curr_artist)
+            lyrics = clean_lyrics(lyrics)
+            songs_txt.write(curr_title + ":" + curr_artist + ":" + lyrics + "\n")
+
+makeSongsTxt()
+# make_songs_dict()

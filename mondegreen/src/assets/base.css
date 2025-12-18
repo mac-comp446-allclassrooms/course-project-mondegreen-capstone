@@ -1,0 +1,213 @@
+/* File for the CSS for all project pages */
+
+@font-face {
+  font-family: titleFont;
+  src: url(res/Mali/Mali-Regular.ttf);
+}
+
+* {
+  background-color: #D0F5E8;
+  font-family: titleFont;
+  margin: 0.1rem;
+}
+
+.game_base {
+  display: grid;
+  grid-template-columns: auto auto 60px 60px;
+  grid-template-rows: auto auto auto auto auto auto min-content;
+  justify-content: start;
+  position: fixed;
+  top: 40px;
+  width: 100vw;
+  padding-bottom: 10px;
+}
+
+.item1 {
+  grid-row: 1 / span 5;
+}
+
+.item2 {
+  grid-column: 2 / span 2;
+}
+
+.item3 {
+  grid-row-start: 2;
+}
+
+.item4 {
+  grid-row-start: 3;
+}
+
+.item5 {
+  grid-column-start: 2;
+  grid-row-start: 4;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto auto;
+  justify-content: start;
+}
+
+.item6 {
+  grid-column-start: 1;
+}
+
+.item7 {
+  grid-column-start: 2;
+}
+
+.item8 {
+  grid-column-start: 2;
+  grid-row-start: 2;
+}
+
+.item9 {
+  grid-column-start: 3;
+  grid-row-start: 4;
+}
+
+.item10 {
+  grid-column-start: 4;
+  grid-row-start: 4;
+}
+
+#gameTitle {
+  color: #714EBB;
+  font-family: titleFont;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  margin: 0;
+  min-height: 50px;
+}
+
+h2 {
+  background-color: inherit;
+}
+
+p, div {
+  font-family: Verdana;
+  background-color: inherit;
+}
+
+input {
+  border-radius: 5px;
+  font-family: Verdana;
+  background-color: white;
+  border-width: 0;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+button {
+  border-radius: 5px;
+  font-family: Verdana;
+  border-width: 0;
+  background-color: #EDB9DD;
+}
+
+button:not(.genre) {
+  background-color: #EDB9DD;
+  box-shadow: 0px 3px 0px #ba6ea3;
+}
+
+/* used https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_buttons_animate3 */
+button:not(.genre):hover {background-color: #d48abc} 
+
+button:not(.genre):active {
+  background-color: #d48abc;
+  box-shadow: 0px 2px 0px #9c4982;
+  transform: translateY(1px);
+}
+
+.one_word {
+  background-color: white;
+  margin: 0.3rem;
+  padding: 5%;
+  text-align: center;
+  border-radius: 5px;
+  min-height: 25px;
+  overflow-wrap: break-word;
+}
+
+.game {
+  width: 100%;
+  padding: 20px;
+}
+
+#lyrics {
+  background-color: #86D1B6;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  margin-top: 12rem;
+  padding: 0.3rem;
+  border-radius: 8px;
+  margin-right: 3rem;
+}
+
+#win_game, #quit_game{
+  position: absolute;
+  top: 0;
+  width: 60%;
+  height: 30%;
+  background: #EFE8FF;
+  color: black;
+  margin-top: 15rem;
+  margin-left: 5rem;
+  padding-top: 5%;
+  text-align: center;
+  border-radius: 8px;
+  border: #EFE8FF;
+  box-shadow: 5px 5px 3px #9885c7;
+}
+
+#score_p, #score_pQ {
+  background: white;
+  color: black;
+  font-size: 60px;
+  text-align: center;
+  width: 30%;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+  margin: auto;
+  border-radius: 8px;
+}
+
+.genre {
+  padding: 20px;
+  gap: 10px;
+  width: 15vw;
+  text-align: center;
+  background-color: #8cc2f5;
+  box-shadow: 0px 3px 0px #4d8ec9;
+}
+
+.genre:hover {background-color: #67B0F5} 
+
+.genre:active {
+  background-color: #67B0F5;
+  box-shadow: 0px 2px 0px #306fab;
+  transform: translateY(1px);
+}
+
+.genreButtons {
+  width: 90vw;
+}
+
+#search {
+  margin-top: 60px;
+}
+
+.songHome {
+  box-shadow: 5px 5px 3px #9885c7;
+}
+
+.songHome, ul {
+  background-color: #EFE8FF;
+  border-radius: 8px;
+  padding: 1%;
+}
+
+#loginPage {
+  margin-top: 6%;
+}
